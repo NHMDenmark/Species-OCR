@@ -13,10 +13,10 @@ def is_cover(img) -> bool:
     # downscale image to improve speed
     scale = 0.5
     img = cv2.resize(img, (0, 0), fx=scale, fy=scale)
-    img = img[(img.shape[0]-img.shape[0]/5).__round__():, :(img.shape[1]/1).__round__()]
+    img = img[(img.shape[0]-img.shape[0]/4).__round__():, :(img.shape[1]/1).__round__()]
 
     # detect QR code
-    decoding = decode(img, max_count=1, timeout=1000)
+    decoding = decode(img, max_count=1, timeout=2000)
     return not decoding
 
     # lower bound and upper bound for brown cardboard color

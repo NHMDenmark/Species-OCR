@@ -3,7 +3,7 @@ from os.path import join
 import cv2
 import shutil
 from nhma_species_ocr.is_cover.is_cover import is_cover
-from nhma_species_ocr.find_cover_label.find_cover_label import find_cover_label
+from nhma_species_ocr.find_cover_label.find_cover_label2 import find_cover_label2
 
 labels_file = "/Users/akselb/Documents/DASSCO/labels.txt"
 labels_folder = "/Users/akselb/Documents/DASSCO/labels"
@@ -24,7 +24,7 @@ if os.path.exists(label_errors_folder):
 os.mkdir(labels_folder)
 os.mkdir(label_errors_folder)
 
-image_path = "/Users/akselb/Documents/DASSCO/test_billeder"
+image_path = "/Users/akselb/Documents/DASSCO/test_billeder_2"
 image_names = [f for f in os.listdir(image_path) if (f[-3:] == 'tif')]
 
 for index, image_name in enumerate(sorted(image_names)):
@@ -32,7 +32,7 @@ for index, image_name in enumerate(sorted(image_names)):
     image = cv2.imread(join(image_path, image_name))
     cover = is_cover(image)
     if cover:
-        cover_label, is_label = find_cover_label(image)
+        cover_label, is_label = find_cover_label2(image)
         if is_label:
             file = open(labels_file, "a")
             os.chdir("/Users/akselb/Documents/DASSCO/labels")
