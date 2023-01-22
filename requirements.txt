@@ -1,0 +1,4 @@
+pylibdmtx==0.1.10
+pytesseract==0.3.10
+setuptools==58.0.4
+opencv-python==4.7.0.68
