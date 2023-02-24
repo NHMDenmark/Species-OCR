@@ -69,7 +69,8 @@ class OCR():
                             
                         linetext = []
                         
-                    linetext.append(row['text'])
+                    if isinstance(row['text'], str):
+                        linetext.append(row['text'])
             
             if len(linetext) != 0:
                 retlist.append(linetext)

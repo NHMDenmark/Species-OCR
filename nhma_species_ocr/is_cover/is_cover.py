@@ -5,7 +5,7 @@ from pylibdmtx.pylibdmtx import decode
 def is_cover(img) -> bool:
     """
     Method that takes an image, and determines whether it is a cover of a species collection.
-    Works by measuring the percentage of pixels inside boundary values of the cardboard cover color.
+    Works by trying to detect a data matrix that species are marked with.
 
     Args:
         img: image to process
@@ -18,14 +18,3 @@ def is_cover(img) -> bool:
     # detect QR code
     decoding = decode(img, max_count=1, timeout=2000)
     return not decoding
-
-    # lower bound and upper bound for brown cardboard color
-    #lower_bound = np.array([100, 130, 180])
-    #upper_bound = np.array([180, 210, 240])
-
-    # find the colors within the boundaries
-    #mask = cv2.inRange(img, lower_bound, upper_bound)
-    #brown_pixels = cv2.countNonZero(mask)
-    #brown_pixels_coverage = (brown_pixels / (img.shape[0] * img.shape[1])) * 100
-
-    #return brown_pixels_coverage > 50
