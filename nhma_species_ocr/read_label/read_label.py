@@ -1,9 +1,10 @@
 import cv2
 from nhma_species_ocr.ocr.tesseract import OCR
 from nhma_species_ocr.util.util import most_frequent, merge_rects_by_distance
+from nhma_species_ocr.util.show_image_debug import show_image_debug
 
 
-def read_label(img):
+def read_label(img: cv2.Mat, debug: bool = False):
     canny = cv2.Canny(img, 10, 130)
 
     rect = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
@@ -27,7 +28,7 @@ def read_label(img):
 
     text_rects = [cv2.boundingRect(cnt) for cnt in text_contours if cv2.contourArea(cnt) > 250 and cv2.contourArea(cnt) < 20000]
 
-    text_rects_merged = merge_rects_by_distance(text_rects, 80)
+    text_rects_merged = merge_rects_by_distance(text_rects, 40)
 
     text = []
     for rect in sorted(text_rects_merged, key=lambda x: (x[1]+x[3]/2)+(x[0]+x[2]/2)/10):
@@ -36,23 +37,15 @@ def read_label(img):
         #img_crop = cv2.medianBlur(img_crop, 5)
 
         #cv2.rectangle(img, (rect[0], rect[1]), (rect[0]+rect[2], rect[1]+rect[3]), (255,0,0), 2)
-        cv2.imshow('', img_crop)
-        cv2.waitKey()
-        cv2.destroyAllWindows()
+        if debug: show_image_debug('text crop', img_crop)
     
-        ocr = OCR(language='eng+dan', config='-c tessedit_char_blacklist=0123456789')
+        ocr = OCR(language='eng+dan', config='--psm 10 -c tessedit_char_blacklist=0123456789/')
         ocr.read_image(img_crop)
         result = ocr.get_text()
         if len(result) == 0:
-            ocr = OCR(language='eng+dan', config='--psm 10 -c tessedit_char_blacklist=0123456789')
+            ocr = OCR(language='eng+dan', config='--psm 10 -c tessedit_char_blacklist=0123456789/') # find single letters
             ocr.read_image(img_crop)
             result = ocr.get_text()
         text.extend(result)
 
     return text
-
-
-labels_file = "/Users/akselbirko/Documents/DASSCO/labels/TilUdvikling00644.png"
-img = cv2.imread(labels_file, cv2.IMREAD_GRAYSCALE)
-text = read_label(img)
-print(text)

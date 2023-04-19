@@ -62,15 +62,15 @@ class OCR():
             linetext = []
             # Make a sentence of read symbols for each line read in the image
             for index, row in self.ocr_result.iterrows():
-                if row['conf'] > 0 and row['width'] * row['height'] > 20: # Check confidence value and that the box has area larger than 10 pixels^2
+                if row['conf'] > 22 and row['width'] * row['height'] > 20: # Check confidence value and that the box has area larger than 10 pixels^2
                     if row['word_num'] == 1:
                         if len(linetext) != 0:
                             retlist.append(linetext)
                             
                         linetext = []
                         
-                    if isinstance(row['text'], str):
-                        linetext.append(row['text'])
+                    if isinstance(row['text'], str) and len(row['text'].strip()):
+                        linetext.append(row['text'].strip())
             
             if len(linetext) != 0:
                 retlist.append(linetext)

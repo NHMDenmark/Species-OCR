@@ -19,7 +19,7 @@ if os.path.exists(labels_folder):
     shutil.rmtree(labels_folder)
 os.mkdir(labels_folder)
 
-image_path = "/Users/akselbirko/Documents/DASSCO/test_billeder_2"
+image_path = "/Users/akselbirko/Documents/DASSCO/test_billeder_3"
 image_names = [f for f in os.listdir(image_path) if (f[-3:] == 'tif')]
 
 grouped_specimen_list = []
