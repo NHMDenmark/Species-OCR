@@ -39,11 +39,11 @@ def read_label(img: cv2.Mat, debug: bool = False):
         #cv2.rectangle(img, (rect[0], rect[1]), (rect[0]+rect[2], rect[1]+rect[3]), (255,0,0), 2)
         if debug: show_image_debug('text crop', img_crop)
     
-        ocr = OCR(language='eng+dan', config='--psm 10 -c tessedit_char_blacklist=0123456789/')
+        ocr = OCR(language='eng+dan', config='-c tessedit_char_blacklist=0123456789')
         ocr.read_image(img_crop)
         result = ocr.get_text()
         if len(result) == 0:
-            ocr = OCR(language='eng+dan', config='--psm 10 -c tessedit_char_blacklist=0123456789/') # find single letters
+            ocr = OCR(language='eng+dan', config='--psm 10 -c tessedit_char_blacklist=0123456789') # find single letters
             ocr.read_image(img_crop)
             result = ocr.get_text()
         text.extend(result)
