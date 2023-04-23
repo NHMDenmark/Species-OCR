@@ -11,6 +11,12 @@ for group in grouped_specimen_list:
     if group['cover']['species_match_gbif'] is not None:
         matches = matches + 1
     else:
-        print(group['cover']['species'])
+        area = ""
+        species = ""
+        if group['cover']['area']:
+            area = group['cover']['area']['text']
+        if group['cover']['species']:
+            species = group['cover']['species']['text']
+        print(group['cover']['image_file'] + " - " + area + " - " + species)
 
 print(matches)

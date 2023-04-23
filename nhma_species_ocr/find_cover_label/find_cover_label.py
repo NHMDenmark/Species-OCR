@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from nhma_species_ocr.rotated_rect_crop.rotated_rect_crop import crop_rotated_rectangle
 from nhma_species_ocr.util.util import most_frequent
-from nhma_species_ocr.util.show_image_debug import show_image_debug
+from nhma_species_ocr.util.util import show_image_debug
 
 
 def find_cover_label(img: cv2.Mat, debug: bool = False) -> tuple[cv2.Mat, bool]:
@@ -31,7 +31,7 @@ def find_cover_label(img: cv2.Mat, debug: bool = False) -> tuple[cv2.Mat, bool]:
     if debug: 
         img_with_contour = img_bottom_left
         rect = cv2.minAreaRect(contours[label_contour])
-        box = cv2.boxPoints(rect) # cv2.boxPoints(rect) for OpenCV 3.x
+        box = cv2.boxPoints(rect)
         box = np.int0(box)
         cv2.drawContours(img_with_contour, [box], 0, (0, 0, 255), 10)
         show_image_debug("label_contour", img_with_contour)

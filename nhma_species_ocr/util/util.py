@@ -1,3 +1,4 @@
+import cv2
 import math
 from difflib import SequenceMatcher
 
@@ -98,3 +99,13 @@ def rect_distance(rect1, rect2):
         return y2 - y1b
     else:             # rectangles intersect
         return 0.
+    
+
+def flatten(l):
+    return [item for sublist in l for item in sublist]
+
+
+def show_image_debug(title: str, img: cv2.Mat):
+    cv2.imshow(title, img)
+    cv2.waitKey()
+    cv2.destroyAllWindows()

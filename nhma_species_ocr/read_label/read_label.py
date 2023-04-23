@@ -1,7 +1,7 @@
 import cv2
 from nhma_species_ocr.ocr.tesseract import OCR
 from nhma_species_ocr.util.util import most_frequent, merge_rects_by_distance
-from nhma_species_ocr.util.show_image_debug import show_image_debug
+from nhma_species_ocr.util.util import show_image_debug
 
 
 def read_label(img: cv2.Mat, debug: bool = False):
