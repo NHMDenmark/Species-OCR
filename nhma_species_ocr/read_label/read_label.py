@@ -1,51 +1,43 @@
+import os
 import cv2
-from nhma_species_ocr.ocr.tesseract import OCR
-from nhma_species_ocr.util.util import most_frequent, merge_rects_by_distance
+import statistics
+from decouple import config
+from google.cloud import vision
 from nhma_species_ocr.util.util import show_image_debug
 
 
-def read_label(img: cv2.Mat, debug: bool = False):
-    canny = cv2.Canny(img, 10, 130)
+labels_threshold_folder = "/Users/akselbirko/Documents/DASSCO/labels_threshold"
 
-    rect = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
-    dilation = cv2.dilate(canny, rect, iterations=1)
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = config('GOOGLE_APPLICATION_CREDENTIALS')
 
-    #cv2.imshow('', dilation)
-    #cv2.waitKey()
-    #cv2.destroyAllWindows()
+def read_label(img_path: str, debug: bool = False) -> list:
+    img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+    threshold = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 91, 18)
+    if debug: show_image_debug("threshold", threshold)
 
-    contours, hierarchy = cv2.findContours(dilation, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    cv2.imwrite("{0}/{1}".format(labels_threshold_folder, img_path.split("/")[-1]), threshold)
 
-    parent_contours_with_subchildren = [cnt[3] for cnt in hierarchy[0] if cnt[2] != -1 and cnt[3] != -1]
-    label_contour = most_frequent(parent_contours_with_subchildren)
+    is_success, im_buf_arr = cv2.imencode(".png", threshold)
+    content = im_buf_arr.tobytes()
 
-    text_contours = [contours[index] for index, cnt in enumerate(hierarchy[0]) if cnt[3] == label_contour]
+    client = vision.ImageAnnotatorClient(client_options={'api_endpoint': 'eu-vision.googleapis.com'}) # Use EU google service
+    response = vision.AnnotateImageResponse(client.document_text_detection(image=vision.Image(content=content))) # Performs text detection on the image file
+    text_blocks = response.full_text_annotation.pages[0].blocks
 
-    #cv2.drawContours(img, text_contours, -1, (255,0,0), 3)
-    #cv2.imshow('', img)
-    #cv2.waitKey()
-    #cv2.destroyAllWindows()
+    paragraphs = []
+    for block in sorted(text_blocks, key=lambda block: block.bounding_box.vertices[0].y):
+        for paragraph in block.paragraphs:
+            if paragraph.confidence > 0.82:
+                words = []
+                for index, word in enumerate(paragraph.words):
+                    word_text = ''.join([symbol.text for symbol in word.symbols if symbol.confidence > 0.3])
+                    word_text = word_text.replace("×", "x")
+                    if word.confidence > 0.5 or word_text.lower() == "x": # Sometimes an "x" can have a low confidence because of font difference
+                        if words.__len__() > 0 and paragraph.words[index-1].symbols[-1].property.detected_break.type_ == 0:
+                            words[-1]['text'] += word_text
+                            words[-1]['confidence'] = statistics.fmean([words[-1]['confidence'], word.confidence])
+                        else:
+                            words.append({ "confidence": word.confidence, "text": word_text })
+                paragraphs.append({ "confidence": paragraph.confidence, "words": words })
 
-    text_rects = [cv2.boundingRect(cnt) for cnt in text_contours if cv2.contourArea(cnt) > 250 and cv2.contourArea(cnt) < 20000]
-
-    text_rects_merged = merge_rects_by_distance(text_rects, 40)
-
-    text = []
-    for rect in sorted(text_rects_merged, key=lambda x: (x[1]+x[3]/2)+(x[0]+x[2]/2)/10):
-        extra_border = 30
-        img_crop = img[rect[1]-extra_border:rect[1]+rect[3]+extra_border, rect[0]-extra_border:rect[0]+rect[2]+extra_border]
-        #img_crop = cv2.medianBlur(img_crop, 5)
-
-        #cv2.rectangle(img, (rect[0], rect[1]), (rect[0]+rect[2], rect[1]+rect[3]), (255,0,0), 2)
-        if debug: show_image_debug('text crop', img_crop)
-    
-        ocr = OCR(language='eng+dan', config='-c tessedit_char_blacklist=0123456789')
-        ocr.read_image(img_crop)
-        result = ocr.get_text()
-        if len(result) == 0:
-            ocr = OCR(language='eng+dan', config='--psm 10 -c tessedit_char_blacklist=0123456789') # find single letters
-            ocr.read_image(img_crop)
-            result = ocr.get_text()
-        text.extend(result)
-
-    return text
+    return paragraphs

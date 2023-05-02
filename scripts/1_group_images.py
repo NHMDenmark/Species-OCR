@@ -39,6 +39,7 @@ for index, image_name in enumerate(sorted(image_names)):
         cv2.imwrite("{0}/{1}.png".format(labels_folder, image_name[:-4]), cover_label)
 
         grouped_specimen_list.append({
+                "id": index+1,
                 "cover": {
                     "image_file": image_name,
                 },
