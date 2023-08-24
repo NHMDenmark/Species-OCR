@@ -1,21 +1,24 @@
 import os
 import cv2
 import statistics
-from decouple import config
+import shutil
 from google.cloud import vision
+from nhma_species_ocr.util.variables import label_threshold_folder, google_credentials, threshold_block_size, threshold_subtract_constant
 from nhma_species_ocr.util.util import show_image_debug
 
 
-labels_threshold_folder = "/Users/akselbirko/Documents/DASSCO/labels_threshold"
+if os.path.exists(label_threshold_folder):
+    shutil.rmtree(label_threshold_folder)
+os.mkdir(label_threshold_folder)
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = config('GOOGLE_APPLICATION_CREDENTIALS')
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = google_credentials
 
 def read_label(img_path: str, debug: bool = False) -> list:
     img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
-    threshold = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 91, 18)
+    threshold = cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, threshold_block_size, threshold_subtract_constant)
     if debug: show_image_debug("threshold", threshold)
 
-    cv2.imwrite("{0}/{1}".format(labels_threshold_folder, img_path.split("/")[-1]), threshold)
+    cv2.imwrite("{0}/{1}".format(label_threshold_folder, img_path.split("/")[-1]), threshold)
 
     is_success, im_buf_arr = cv2.imencode(".png", threshold)
     content = im_buf_arr.tobytes()

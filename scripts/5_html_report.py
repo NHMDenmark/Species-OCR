@@ -1,16 +1,16 @@
 import cv2
 import json
 import base64
+from decouple import config
+from nhma_species_ocr.util.variables import label_folder, output_file
 from nhma_species_ocr.report.report_template import report_template
 from nhma_species_ocr.report.report_entry import report_entry
 
 
-labels_folder = "/Users/akselbirko/Documents/DASSCO/labels"
-grouped_images_file = "/Users/akselbirko/Documents/DASSCO/output.json"
-html_output_file_success = "/Users/akselbirko/Documents/DASSCO/report_success.html"
-html_output_file_error = "/Users/akselbirko/Documents/DASSCO/report_error.html"
+html_output_file_success = config('HTML_REPORT_SUCCESS')
+html_output_file_error = config('HTML_REPORT_ERROR')
 
-with open(grouped_images_file) as file:
+with open(output_file) as file:
     grouped_specimen_list = json.load(file)
 
 report_entries_success = []
@@ -19,11 +19,11 @@ report_entries_error = []
 list_success = [group for group in grouped_specimen_list if group['cover']['gbif_match'] is not None and group['cover']['error'] is False]
 list_error   = [group for group in grouped_specimen_list if group['cover']['gbif_match'] is None      or group['cover']['error'] is True]
 
-img_scaling = 0.4
+img_scaling = 1
 
 for list in [list_success, list_error]:
     for index, group in enumerate(list):
-        label_path = "{0}/{1}.png".format(labels_folder, group['cover']['image_file'][:-4])
+        label_path = f"{label_folder}/{group['cover']['image_file'][:-4]}.png"
         img = cv2.imread(label_path)
         img = cv2.resize(img, (0, 0), fx=img_scaling, fy=img_scaling)
         retval, buffer = cv2.imencode('.png', img)

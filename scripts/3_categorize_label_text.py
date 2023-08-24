@@ -1,17 +1,18 @@
 import json
 import copy
 import statistics
+from nhma_species_ocr.util.variables import output_file
 from nhma_species_ocr.util.util import flatten
 from nhma_species_ocr.util.area_authority_list import area_authority_list
 
 
-labels_folder = "/Users/akselbirko/Documents/DASSCO/labels"
-grouped_images_file = "/Users/akselbirko/Documents/DASSCO/output.json"
-
-with open(grouped_images_file) as file:
+with open(output_file) as file:
     grouped_specimen_list = json.load(file)
 
+
 for index, group in enumerate(grouped_specimen_list):
+    print("CATEGORIZE LABEL TEXT: group #{0} of {1}: {2}...".format(index+1, len(grouped_specimen_list), group['cover']['image_file']))
+
     paragraphs = copy.copy(group['cover']['full_paragraphs'])
     
     area = family = genus = species = variety = subsp = { "confidence": 0, "text": "" }
@@ -51,9 +52,12 @@ for index, group in enumerate(grouped_specimen_list):
     for index, word in enumerate(words_left):
         if word['text'].lower() == "x":
             species = { "confidence": statistics.fmean([word['confidence'] for word in words_left[index-1:index+1]]), "text": ' '.join([word['text'] for word in words_left[index-1:index+2]]) }
-            words_left.pop(index-1)
-            words_left.pop(index-1)
-            words_left.pop(index-1)
+            try:
+                words_left.pop(index-1)
+                words_left.pop(index-1)
+                words_left.pop(index-1)
+            except:
+                error = True
 
     if words_left.__len__() > 0:
         genus = words_left[0]
@@ -91,5 +95,5 @@ for index, group in enumerate(grouped_specimen_list):
     group['cover']['highest_classification_level'] = highest_classification_level
     
 
-with open(grouped_images_file, "w+") as outfile:
+with open(output_file, "w+") as outfile:
     outfile.write(json.dumps(grouped_specimen_list, indent=4))
