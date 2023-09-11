@@ -6,12 +6,6 @@ def report_template(entries: list[str] = []):
 <html>
 <meta charset="UTF-8">
 
-<body>
-""" + entries_html + """
-</body>
-
-</html>
-
 <style>
     .equal {
         box-shadow: inset 0 -0.5vw 0 0 rgb(178, 250, 173);
@@ -139,5 +133,11 @@ def report_template(entries: list[str] = []):
         padding-bottom: 2.5vw;
     }
 </style>
+
+<body>
+""" + entries_html + """
+</body>
+
+</html>
 
 """
