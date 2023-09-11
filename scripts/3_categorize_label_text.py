@@ -38,7 +38,7 @@ for index, group in enumerate(grouped_specimen_list):
             try:
                 variety = words_left[index+1]
             except IndexError:
-                variety = 'ERROR'
+                variety['text'] = "ERROR"
                 error = True
             words_left = words_left[:index]
             break
