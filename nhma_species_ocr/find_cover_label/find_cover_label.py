@@ -1,4 +1,5 @@
 import cv2
+import copy
 import numpy as np
 from nhma_species_ocr.util.variables import dilation_rect_size, label_extra_border
 from nhma_species_ocr.rotated_rect_crop.rotated_rect_crop import crop_rotated_rectangle
@@ -29,7 +30,7 @@ def find_cover_label(img: cv2.Mat, debug: bool = False) -> tuple[cv2.Mat, bool]:
 
         ((x, y), (width, height), angle) = cv2.minAreaRect(contours[label_contour])
         if debug: 
-            img_with_contour = img_bottom_left
+            img_with_contour = copy.copy(img_bottom_left)
             rect = cv2.minAreaRect(contours[label_contour])
             box = cv2.boxPoints(rect)
             box = np.int0(box)
@@ -38,6 +39,9 @@ def find_cover_label(img: cv2.Mat, debug: bool = False) -> tuple[cv2.Mat, bool]:
 
         min_rect = ((x, y), (width + label_extra_border, height + label_extra_border), angle)
         label_crop = crop_rotated_rectangle(img_bottom_left, min_rect)
+        if not label_crop:
+            min_rect = ((x, y), (width, height), angle)
+            label_crop = crop_rotated_rectangle(img_bottom_left, min_rect)
         if label_crop.shape[0] > label_crop.shape[1]:
             label_crop = cv2.rotate(label_crop, cv2.ROTATE_90_CLOCKWISE)
 
