@@ -39,7 +39,7 @@ def find_cover_label(img: cv2.Mat, debug: bool = False) -> tuple[cv2.Mat, bool]:
 
         min_rect = ((x, y), (width + label_extra_border, height + label_extra_border), angle)
         label_crop = crop_rotated_rectangle(img_bottom_left, min_rect)
-        if not label_crop:
+        if label_crop is None:
             min_rect = ((x, y), (width, height), angle)
             label_crop = crop_rotated_rectangle(img_bottom_left, min_rect)
         if label_crop.shape[0] > label_crop.shape[1]:

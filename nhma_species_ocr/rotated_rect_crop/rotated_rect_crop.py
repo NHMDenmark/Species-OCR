@@ -132,7 +132,6 @@ def crop_rotated_rectangle(image, rect, shrink_border = 0):
     num_cols = image.shape[1]
 
     if not inside_rect(rect = rect, num_cols = num_cols, num_rows = num_rows):
-        print("Proposed rectangle is not fully in the image.")
         return None
 
     rotated_angle = rect[2]
