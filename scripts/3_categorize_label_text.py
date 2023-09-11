@@ -35,7 +35,11 @@ for index, group in enumerate(grouped_specimen_list):
             family = word
             words_left.pop(index)
         elif word['text'].lower() == "var.":
-            variety = words_left[index+1]
+            try:
+                variety = words_left[index+1]
+            except IndexError:
+                variety = 'ERROR'
+                error = True
             words_left = words_left[:index]
             break
         elif word['text'].lower() in ["subsp.", "ssp."]:
