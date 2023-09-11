@@ -19,7 +19,7 @@ report_entries_error = []
 list_success = [group for group in grouped_specimen_list if group['cover']['gbif_match'] is not None and group['cover']['error'] is False]
 list_error   = [group for group in grouped_specimen_list if group['cover']['gbif_match'] is None      or group['cover']['error'] is True]
 
-img_scaling = 1
+img_scaling = .2
 
 for list in [list_success, list_error]:
     for index, group in enumerate(list):
