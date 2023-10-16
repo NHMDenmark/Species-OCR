@@ -1,9 +1,11 @@
-from pygbif import species as GBIF_species
+import requests
 
 
 def gbif_name_lookup(name: str, rank: str):
-    res = GBIF_species.name_lookup(q=name, rank=rank, limit=1)
-    if res['count'] == 0:
+    params = {'name': name, 'rank': rank, 'limit': 1}
+    res = requests.get("https://api.gbif.org/v1/species?", params).json()
+    # print(res)
+    if not res['results'] or res['results'].__len__() == 0:
         return None
     else:
         result = res['results'][0]

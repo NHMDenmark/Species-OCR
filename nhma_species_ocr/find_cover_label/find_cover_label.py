@@ -1,7 +1,7 @@
 import cv2
 import copy
 import numpy as np
-from nhma_species_ocr.util.variables import dilation_rect_size, label_extra_border
+from nhma_species_ocr.util.variables import dilation_rect_size, label_extra_border, label_scale
 from nhma_species_ocr.rotated_rect_crop.rotated_rect_crop import crop_rotated_rectangle
 from nhma_species_ocr.util.util import most_frequent
 from nhma_species_ocr.util.util import show_image_debug
@@ -23,7 +23,7 @@ def find_cover_label(img: cv2.Mat, debug: bool = False) -> tuple[cv2.Mat, bool]:
     contours, hierarchy = cv2.findContours(dilation, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     parent_contours_with_subchildren = [cnt[3] for cnt in hierarchy[0] if cnt[2] != -1 and cnt[3] != -1]
-    if parent_contours_with_subchildren.__len__() is 0:
+    if parent_contours_with_subchildren.__len__() == 0:
         label_crop = img_bottom_left
     else:
         label_contour = most_frequent(parent_contours_with_subchildren)
