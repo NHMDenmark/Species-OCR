@@ -6,7 +6,7 @@ import shutil
 from nhma_species_ocr.util.variables import output_file, web_host, label_folder, label_threshold_folder, label_scale
 
 
-label_temp_folder = f"{label_folder}/temp"
+label_temp_folder = f"{label_folder}_temp"
 
 if os.path.exists(label_temp_folder):
     shutil.rmtree(label_temp_folder)
@@ -41,27 +41,22 @@ for index, group in enumerate(grouped_specimen_list):
     }
 
     scale = label_scale / 100
-    
+
     label = cv2.imread(f"{label_folder}/{cover['image_file'][:-4]}.png")
     label_downscaled = cv2.resize(label, (0, 0), fx=scale, fy=scale)
 
     cv2.imwrite(f"{label_temp_folder}/{cover['image_file'][:-4]}.png", label_downscaled)
 
-    #files = {
-    #    'label': open(f"{label_folder}/{cover['image_file'][:-4]}.png",'rb'),
-    #    'label_threshold': open(f"{label_threshold_folder}/{cover['image_file'][:-4]}.png",'rb')
-    #}
-
     files = {
-        'label': open(f"{label_temp_folder}/{cover['image_file'][:-4]}.png",'rb'),
-        'label_threshold': open(f"{label_threshold_folder}/{cover['image_file'][:-4]}.png",'rb')
+        'label': open(f"{label_temp_folder}/{cover['image_file'][:-4]}.png", 'rb'),
+        'label_threshold': open(f"{label_threshold_folder}/{cover['image_file'][:-4]}.png", 'rb')
     }
 
-    headers = { 'Authorization': 'cO2ofuusuMpgjWm5xPT0VQecgHQpEZky84bDdbdkabM=' }
+    headers = {'Authorization': 'cO2ofuusuMpgjWm5xPT0VQecgHQpEZky84bDdbdkabM='}
 
     r = requests.post(web_host + '/api/folderupload', files=files, data=data, headers=headers)
     if not r.ok:
-        #print(r.content)
+        # print(r.content)
         raise Exception(r.json())
 
 if os.path.exists(label_temp_folder):
