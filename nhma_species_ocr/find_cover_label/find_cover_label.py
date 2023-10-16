@@ -1,7 +1,7 @@
 import cv2
 import copy
 import numpy as np
-from nhma_species_ocr.util.variables import dilation_rect_size, label_extra_border, label_scale
+from nhma_species_ocr.util.variables import dilation_rect_size, label_extra_border, canny_t1, canny_t2
 from nhma_species_ocr.rotated_rect_crop.rotated_rect_crop import crop_rotated_rectangle
 from nhma_species_ocr.util.util import most_frequent
 from nhma_species_ocr.util.util import show_image_debug
@@ -9,16 +9,19 @@ from nhma_species_ocr.util.util import show_image_debug
 
 def find_cover_label(img: cv2.Mat, debug: bool = False) -> tuple[cv2.Mat, bool]:
     """
-    
-    """
-    img_bottom_left = img[(img.shape[0]-img.shape[0]/4).__round__():, (img.shape[1]/16).__round__():(img.shape[1]/2).__round__()]
 
-    canny = cv2.Canny(img_bottom_left, 100, 200)
-    if debug: show_image_debug("canny", canny)
+    """
+    img_bottom_left = img[(img.shape[0]-img.shape[0]/4).__round__():,
+                          (img.shape[1]/16).__round__():(img.shape[1]/2).__round__()]
+
+    canny = cv2.Canny(img_bottom_left, canny_t1, canny_t2)
+    if debug:
+        show_image_debug("canny", canny)
 
     rect = cv2.getStructuringElement(cv2.MORPH_RECT, (dilation_rect_size, dilation_rect_size))
     dilation = cv2.dilate(canny, rect, iterations=1)
-    if debug: show_image_debug("dilation", dilation)
+    if debug:
+        show_image_debug("dilation", dilation)
 
     contours, hierarchy = cv2.findContours(dilation, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
@@ -29,7 +32,7 @@ def find_cover_label(img: cv2.Mat, debug: bool = False) -> tuple[cv2.Mat, bool]:
         label_contour = most_frequent(parent_contours_with_subchildren)
 
         ((x, y), (width, height), angle) = cv2.minAreaRect(contours[label_contour])
-        if debug: 
+        if debug:
             img_with_contour = copy.copy(img_bottom_left)
             rect = cv2.minAreaRect(contours[label_contour])
             box = cv2.boxPoints(rect)

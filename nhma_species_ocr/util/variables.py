@@ -16,6 +16,8 @@ except UndefinedValueError as e:
 
 # Optional
 dilation_rect_size = config('FIND_COVER_LABEL_DILATION_RECT_SIZE', default=8, cast=int)
+canny_t1 = config('FIND_COVER_LABEL_CANNY_T1', default=100, cast=int)
+canny_t2 = config('FIND_COVER_LABEL_CANNY_T2', default=200, cast=int)
 label_scale = config('LABEL_SCALE_PERCENT', default=40, cast=int)
 label_extra_border = config('LABEL_EXTRA_BORDER_PIXELS', default=100, cast=int)
 cover_detection_scale = config('COVER_DETECTION_SCALE_PERCENT', default=40, cast=int)
