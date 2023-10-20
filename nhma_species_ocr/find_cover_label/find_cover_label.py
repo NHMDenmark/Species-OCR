@@ -11,10 +11,19 @@ def find_cover_label(img: cv2.Mat, debug: bool = False) -> tuple[cv2.Mat, bool]:
     """
 
     """
-    img_bottom_left = img[(img.shape[0]-img.shape[0]/4).__round__():,
-                          (img.shape[1]/16).__round__():(img.shape[1]/2).__round__()]
+    img_bottom_left = img[(img.shape[0]-img.shape[0]/4).__round__():, :(img.shape[1]/2).__round__()]
 
-    canny = cv2.Canny(img_bottom_left, canny_t1, canny_t2)
+    img_center = img[(img.shape[0]/4).__round__():(img.shape[0]-img.shape[0]/4).__round__(),
+                     (img.shape[1]/4).__round__():(img.shape[1]-img.shape[1]/4).__round__()]
+
+    img_gray = cv2.cvtColor(img_center, cv2.COLOR_BGR2GRAY)
+    thresh, thresh_im = cv2.threshold(img_gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    low_thresh = max(0.2 * thresh, 0)
+    high_thresh = max(0.4 * thresh, 0)
+
+    blur = cv2.GaussianBlur(img_bottom_left, (21, 21), 0)
+
+    canny = cv2.Canny(blur, low_thresh, high_thresh)
     if debug:
         show_image_debug("canny", canny)
 
