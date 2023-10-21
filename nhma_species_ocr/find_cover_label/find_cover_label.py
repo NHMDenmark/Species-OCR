@@ -36,7 +36,7 @@ def find_cover_label(img: cv2.Mat, debug: bool = False) -> tuple[cv2.Mat, bool]:
     img_with_candidate_rectangles = img_bottom_left.copy()
     candidate_rectangles = []
     for i, contour in enumerate(contours):
-        approx = cv2.approxPolyDP(contour, 0.01 * cv2.arcLength(contour, True), True)
+        approx = cv2.approxPolyDP(contour, 0.1 * cv2.arcLength(contour, True), True)
         if len(approx) == 4:  # Approximate polygon is rectangle
             ((x, y), (width, height), angle) = rect = cv2.minAreaRect(contour)
             a = width * height
