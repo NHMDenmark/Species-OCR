@@ -15,6 +15,5 @@ def is_cover(img) -> bool:
     img = cv2.resize(img, (0, 0), fx=scale, fy=scale)
     img = img[:(img.shape[0]/5).__round__(), :(img.shape[1]/1).__round__()]
 
-    print('decoding')
     decoding = decode(img, max_count=1, timeout=cover_detection_timeout, threshold=30, shrink=3, deviation=25)
     return not decoding
