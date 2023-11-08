@@ -18,13 +18,13 @@ for index, group in enumerate(grouped_specimen_list):
     species_name = group['cover']['species']['text']
     if highest_classification_level == 'subsp':
         subsp = group['cover']['subsp']['text']
-        lookup_name = "{0} subsp. {1}".format(species_name, subsp)
+        lookup_name = f"{species_name} {subsp}"
         result = gbif_name_lookup(lookup_name, 'subspecies')
         if result and similar(result['canonicalName'].lower(), ' '.join([species_name.lower(), subsp.lower()])) == 1:
             group['cover']['gbif_match'] = result
     elif highest_classification_level == 'variety':
         variety = group['cover']['variety']['text']
-        lookup_name = "{0} var. {1}".format(species_name, variety)
+        lookup_name = f"{species_name} {variety}"
         result = gbif_name_lookup(lookup_name, 'variety')
         if result and similar(result['canonicalName'].lower(), ' '.join([species_name.lower(), variety.lower()])) == 1:
             group['cover']['gbif_match'] = result
