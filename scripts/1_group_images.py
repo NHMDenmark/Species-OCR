@@ -6,6 +6,7 @@ from os.path import join
 from nhma_species_ocr.util.variables import image_folder, label_folder, dev_only_covers, output_file
 from nhma_species_ocr.is_cover.is_cover import is_cover
 from nhma_species_ocr.find_cover_label.find_cover_label import find_cover_label
+from nhma_species_ocr.read_specimen_data_matrix.read_specimen_data_matrix import read_specimen_data_matrix
 
 
 image_names = [f for f in os.listdir(image_folder) if (f[-3:] == 'tif')]
@@ -35,7 +36,8 @@ for index, image_name in enumerate(sorted(image_names)):
         )
     else:
         grouped_specimen_list[-1]['specimen'].append({
-                "image_file": image_name
+                "image_file": image_name,
+                "id": read_specimen_data_matrix(image, noTimeout=True)
             }
         )
 
