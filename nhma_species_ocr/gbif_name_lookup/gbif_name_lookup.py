@@ -34,7 +34,7 @@ def gbif_name_lookup(name: str, rank: str):
         if ('synonym' in result and result['synonym'] is True and 'acceptedUsageKey' in result):
             synonym = requests.get(f"https://api.gbif.org/v1/species/{result['acceptedUsageKey']}").json()
             if (synonym):
-                result['synonymResult'] = standardize_result(synonym)
+                result['synonymResult'] = standardize_result(synonym, rank)
 
         return result
 
