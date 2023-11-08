@@ -13,10 +13,10 @@ def standardize_result(result: dict, rank: str):
             result['genus'] = result['species'].split(' ')[0]
         if 'species' in result and 'canonicalName' not in result:
             result['canonicalName'] = result['species']
-        if rank.lower() == "variety" and 'canonicalName' in result:
+        if rank.lower() == "variety" and 'canonicalName' in result and result['canonicalName'].split(' ').__len__() > 2:
             result['variety'] = result['canonicalName'].split(' ')[2]
             result['species'] = ' '.join(result['canonicalName'].split(' ')[:2])
-        if rank.lower() == "subspecies" and 'canonicalName' in result:
+        if rank.lower() == "subspecies" and 'canonicalName' in result and result['canonicalName'].split(' ').__len__() > 2:
             result['subsp']  = result['canonicalName'].split(' ')[2]
             result['species'] = ' '.join(result['canonicalName'].split(' ')[:2])
     return result
