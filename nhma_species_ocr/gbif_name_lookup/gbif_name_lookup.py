@@ -31,23 +31,14 @@ def standardize_result(result: dict, rank: str):
 
 
 def gbif_name_lookup(name: str, rank: str):
-    params = {"name": name.lower(), "rank": rank, "kingdom": "plantae", "limit": 1}
-    result = requests.get("https://api.gbif.org/v1/species/match?", params).json()
+    params = {"name": name.lower(), "rank": rank, "limit": 3}
+    data: list = requests.get("https://api.gbif.org/v1/species?", params).json()
 
-    if not result:
+    if not (data and "results" in data and len(data["results"] > 0)):
         return None
-    else:
-        result = standardize_result(result, rank)
 
-        if (
-            "synonym" in result
-            and result["synonym"] is True
-            and "acceptedUsageKey" in result
-        ):
-            synonym = requests.get(
-                f"https://api.gbif.org/v1/species/{result['acceptedUsageKey']}"
-            ).json()
-            if synonym:
-                result["synonymResult"] = standardize_result(synonym, rank)
+    results = [
+        result for result in data["results"] if result["kingdom"].lower() == "plantae"
+    ]
 
-        return result
+    return standardize_result(results[0], rank) if len(results) > 0 else None
