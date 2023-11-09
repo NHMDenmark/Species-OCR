@@ -1,7 +1,7 @@
-
 def report_template(entries: list[str] = []):
-    entries_html = ''.join(entries)
-    return """
+    entries_html = "".join(entries)
+    return (
+        """
 
 <html>
 <meta charset="UTF-8">
@@ -135,9 +135,12 @@ def report_template(entries: list[str] = []):
 </style>
 
 <body>
-""" + entries_html + """
+"""
+        + entries_html
+        + """
 </body>
 
 </html>
 
 """
+    )

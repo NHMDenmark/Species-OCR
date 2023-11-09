@@ -1,25 +1,26 @@
-import cv2
 from difflib import SequenceMatcher
+
+import cv2
 
 
 def similar(a, b):
     return SequenceMatcher(None, a, b).ratio()
 
 
-def flatten(l):
-    return [item for sublist in l for item in sublist]
+def flatten(list):
+    return [item for sublist in list for item in sublist]
 
 
 def most_frequent(list):
     counter = 0
     element = list[0]
-     
+
     for i in list:
         curr_frequency = list.count(i)
-        if(curr_frequency> counter):
+        if curr_frequency > counter:
             counter = curr_frequency
             element = i
- 
+
     return element
 
 
