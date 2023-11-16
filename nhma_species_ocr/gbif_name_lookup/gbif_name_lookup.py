@@ -34,7 +34,7 @@ def gbif_name_lookup(name: str, rank: str):
     params = {"name": name.lower(), "rank": rank, "limit": 3}
     data: list = requests.get("https://api.gbif.org/v1/species?", params).json()
 
-    if not (data and "results" in data and len(data["results"] > 0)):
+    if not (data and "results" in data and len(data["results"]) > 0):
         return None
 
     results = [
