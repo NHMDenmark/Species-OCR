@@ -11,8 +11,8 @@ try:
     web_host = config("WEB_HOST")
 except UndefinedValueError as e:
     raise Exception(
-        f"Required environment variable '{e.__str__().split(' ')[0]}' not found. 
-Reference the .env.example file of this project for required variables"
+        f"""Required environment variable '{e.__str__().split(' ')[0]}' not found.
+ Reference the .env.example file of this project for required variables"""
     )
 
 # Optional
