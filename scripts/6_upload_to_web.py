@@ -69,6 +69,3 @@ for index, group in enumerate(grouped_specimen_list):
     if not r.ok:
         # print(r.content)
         raise Exception(r.json())
-
-if os.path.exists(label_temp_folder):
-    shutil.rmtree(label_temp_folder)
