@@ -38,7 +38,9 @@ def gbif_name_lookup(name: str, rank: str):
         return None
 
     results = [
-        result for result in data["results"] if result["kingdom"].lower() == "plantae"
+        result
+        for result in data["results"]
+        if "kingdom" in result and result["kingdom"].lower() == "plantae"
     ]
 
     return standardize_result(results[0], rank) if len(results) > 0 else None
