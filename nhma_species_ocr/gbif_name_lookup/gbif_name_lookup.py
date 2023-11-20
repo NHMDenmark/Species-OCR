@@ -34,9 +34,9 @@ def standardize_result(result: dict, rank: str):
             and len(result["accepted"].split(" ")) > 2
         ):
             if result["accepted"][2] == "var.":
-                result["variety"] = result["accepted"][3]
+                result["variety"] = result["accepted"].split(" ")[3]
             else:
-                result["subspecies"] = result["accepted"][3]
+                result["subspecies"] = result["accepted"].split(" ")[3]
     return result
 
 
