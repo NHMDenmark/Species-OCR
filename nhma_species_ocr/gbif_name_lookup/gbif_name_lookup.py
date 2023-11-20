@@ -3,12 +3,12 @@ import requests
 
 def standardize_result(result: dict, rank: str):
     if rank.lower() in ["species", "variety", "subspecies"]:
-        if "canonicalName" in result:
-            result["species"] = result["canonicalName"]
         if "species" in result:
             result["species"] = result["species"].replace("\u00d7", "x")
         if "canonicalName" in result:
             result["canonicalName"] = result["canonicalName"].replace("\u00d7", "x")
+        if "canonicalName" in result and len(result["canonicalName"].split(" ")) > 1:
+            result["species"] = " ".join(result["canonicalName"].split(" ")[:2])
         if "species" in result and "genus" not in result:
             result["genus"] = result["species"].split(" ")[0]
         if "species" in result and "canonicalName" not in result:
@@ -19,14 +19,12 @@ def standardize_result(result: dict, rank: str):
             and len(result["canonicalName"].split(" ")) > 2
         ):
             result["variety"] = result["canonicalName"].split(" ")[2]
-            result["species"] = " ".join(result["canonicalName"].split(" ")[:2])
         if (
             rank.lower() == "subspecies"
             and "canonicalName" in result
             and len(result["canonicalName"].split(" ")) > 2
         ):
             result["subsp"] = result["canonicalName"].split(" ")[2]
-            result["species"] = " ".join(result["canonicalName"].split(" ")[:2])
     return result
 
 
