@@ -27,6 +27,16 @@ def standardize_result(result: dict, rank: str):
         ):
             result["subsp"] = result["canonicalName"].split(" ")[2]
             result["species"] = " ".join(result["canonicalName"].split(" ")[:2])
+        if (
+            "taxonomicStatus" in result
+            and result["taxonomicStatus"].lower() == "synonym"
+            and "accepted" in result
+            and len(result["accepted"].split(" ")) > 2
+        ):
+            if result["accepted"][2] == "var.":
+                result["variety"] = result["accepted"][3]
+            else:
+                result["subspecies"] = result["accepted"][3]
     return result
 
 
