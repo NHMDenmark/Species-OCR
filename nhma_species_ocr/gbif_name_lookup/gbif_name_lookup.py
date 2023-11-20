@@ -3,7 +3,7 @@ import requests
 
 def standardize_result(result: dict, rank: str):
     if rank.lower() in ["species", "variety", "subspecies"]:
-        if "species" not in result and "canonicalName" in result:
+        if "canonicalName" in result:
             result["species"] = result["canonicalName"]
         if "species" in result:
             result["species"] = result["species"].replace("\u00d7", "x")
