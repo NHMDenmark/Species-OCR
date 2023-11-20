@@ -2,7 +2,7 @@ import requests
 
 
 def standardize_result(result: dict, rank: str):
-    if rank.lower() in ["species", "variety", "subsp"]:
+    if rank.lower() in ["species", "variety", "subspecies"]:
         if "species" not in result and "canonicalName" in result:
             result["species"] = result["canonicalName"]
         if "species" in result:
@@ -27,16 +27,6 @@ def standardize_result(result: dict, rank: str):
         ):
             result["subsp"] = result["canonicalName"].split(" ")[2]
             result["species"] = " ".join(result["canonicalName"].split(" ")[:2])
-        if (
-            "taxonomicStatus" in result
-            and result["taxonomicStatus"].lower() == "synonym"
-            and "accepted" in result
-            and len(result["accepted"].split(" ")) > 2
-        ):
-            if result["accepted"].split(" ")[2] == "var.":
-                result["variety"] = result["accepted"].split(" ")[3]
-            else:
-                result["subsp"] = result["accepted"].split(" ")[3]
     return result
 
 
