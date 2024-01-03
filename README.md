@@ -79,7 +79,7 @@ The id for a specimen is extracted from the data matrix.
 
 ### 2_read_labels.py
 
-This script reads the full text of each cover label, and adds it to the output file.
+This script creates a threshold image from each cover label, reads the full text, and adds it to the output file.
 
 ### 3_categorize_label_text.py
 
