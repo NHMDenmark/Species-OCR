@@ -2,14 +2,15 @@ import base64
 import json
 
 import cv2
-from decouple import config
 
 from nhma_species_ocr.report.report_entry import report_entry
 from nhma_species_ocr.report.report_template import report_template
-from nhma_species_ocr.util.variables import label_folder, output_file
-
-html_output_file_success = config("HTML_REPORT_SUCCESS")
-html_output_file_error = config("HTML_REPORT_ERROR")
+from nhma_species_ocr.util.variables import (
+    label_folder,
+    output_file,
+    report_error,
+    report_success,
+)
 
 with open(output_file) as file:
     grouped_specimen_list = json.load(file)
@@ -93,7 +94,7 @@ for list in [list_success, list_error]:
 html_success = report_template(report_entries_success)
 html_error = report_template(report_entries_error)
 
-with open(html_output_file_success, "w+", encoding="utf-8") as outfile:
+with open(report_success, "w+", encoding="utf-8") as outfile:
     outfile.write(html_success)
-with open(html_output_file_error, "w+", encoding="utf-8") as outfile:
+with open(report_error, "w+", encoding="utf-8") as outfile:
     outfile.write(html_error)
