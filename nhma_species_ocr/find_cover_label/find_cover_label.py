@@ -6,8 +6,16 @@ from nhma_species_ocr.util.util import show_image_debug
 from nhma_species_ocr.util.variables import dilation_rect_size, label_extra_border
 
 
-def find_cover_label(img: cv2.Mat, debug: bool = False) -> tuple[cv2.Mat, bool]:
-    """ """
+def find_cover_label(img: cv2.Mat, debug: bool = False) -> cv2.Mat:
+    """Takes an image of a specimen cover and crops to fit the label
+
+    Args:
+        img (cv2.Mat): Image of a specimen cover
+        debug (bool, optional): Defaults to False
+
+    Returns:
+        cv2.Mat: The image cropped to fit the label
+    """
     img_bottom_left = img[
         (img.shape[0] - img.shape[0] / 4).__round__() :,
         : (img.shape[1] / 2).__round__(),

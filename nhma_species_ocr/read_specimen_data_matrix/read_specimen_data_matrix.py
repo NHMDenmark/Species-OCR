@@ -7,12 +7,16 @@ from nhma_species_ocr.util.variables import (
 )
 
 
-def read_specimen_data_matrix(img, no_timeout: bool = False) -> str:
-    """
-    Method that takes an image, and tries to read any data matrix present
+def read_specimen_data_matrix(img: cv2.Mat, no_timeout: bool = False) -> str:
+    """Takes an image, and tries to read any data matrix present
 
     Args:
-        img: image to process
+        img (cv2.Mat): Image to process
+        no_timeout (bool, optional): Run without timeout causing a full scan.
+        Defaults to false
+
+    Returns:
+        str: the data read, else None
     """
     scale = cover_detection_scale / 100
     img = cv2.resize(img, (0, 0), fx=scale, fy=scale)

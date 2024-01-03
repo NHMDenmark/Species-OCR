@@ -1,7 +1,6 @@
 import json
 
 from nhma_species_ocr.gbif_name_lookup.gbif_name_lookup import gbif_name_lookup
-from nhma_species_ocr.util.util import similar
 from nhma_species_ocr.util.variables import output_file
 
 with open(output_file) as file:
@@ -23,44 +22,31 @@ for index, group in enumerate(grouped_specimen_list):
         subsp = group["cover"]["subsp"]["text"]
         lookup_name = f"{species_name} {subsp}"
         result = gbif_name_lookup(lookup_name, "subspecies")
-        if (
-            result
-            and similar(
-                result["canonicalName"].lower(),
-                " ".join([species_name.lower(), subsp.lower()]),
-            )
-            == 1
+        if result and result["canonicalName"].lower() == " ".join(
+            [species_name.lower(), subsp.lower()]
         ):
             group["cover"]["gbif_match"] = result
     elif highest_classification_level == "variety":
         variety = group["cover"]["variety"]["text"]
         lookup_name = f"{species_name} {variety}"
         result = gbif_name_lookup(lookup_name, "variety")
-        if (
-            result
-            and similar(
-                result["canonicalName"].lower(),
-                " ".join([species_name.lower(), variety.lower()]),
-            )
-            == 1
+        if result and result["canonicalName"].lower() == " ".join(
+            [species_name.lower(), variety.lower()]
         ):
             group["cover"]["gbif_match"] = result
     elif highest_classification_level == "species":
         result = gbif_name_lookup(species_name, "species")
-        if (
-            result
-            and similar(result["canonicalName"].lower(), species_name.lower()) == 1
-        ):
+        if result and result["canonicalName"].lower() == species_name.lower():
             group["cover"]["gbif_match"] = result
     elif highest_classification_level == "genus":
         genus = group["cover"]["genus"]["text"]
         result = gbif_name_lookup(genus, "genus")
-        if result and similar(result["canonicalName"].lower(), genus.lower()) == 1:
+        if result and result["canonicalName"].lower() == genus.lower():
             group["cover"]["gbif_match"] = result
     elif highest_classification_level == "family":
         family = group["cover"]["family"]["text"]
         result = gbif_name_lookup(family, "family")
-        if result and similar(result["canonicalName"].lower(), family.lower()) == 1:
+        if result and result["canonicalName"].lower() == family.lower():
             group["cover"]["gbif_match"] = result
 
 

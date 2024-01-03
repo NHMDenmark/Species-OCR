@@ -21,6 +21,15 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = google_credentials
 
 
 def read_label(img_path: str, debug: bool = False) -> list:
+    """Reads the text of a specimen cover label using the google vision api
+
+    Args:
+        img_path (str): Path to the label image
+        debug (bool, optional): Defaults to False
+
+    Returns:
+        list: Paragraphs containing lists of words
+    """
     img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
     threshold = cv2.adaptiveThreshold(
         img,

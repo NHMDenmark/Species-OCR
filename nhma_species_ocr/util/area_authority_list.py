@@ -1,3 +1,5 @@
+# Accepted list of areas that occur on labels
+
 area_authority_list = [
     "Fennoscandia",
     "Dania",

@@ -1,7 +1,17 @@
 import requests
 
 
-def standardize_result(result: dict, rank: str):
+def standardize_result(result: dict, rank: str) -> dict:
+    """Cleans the return value from GBIF, and makes sure the value for the rank
+    specified is set
+
+    Args:
+        result (dict): GBIF result dict
+        rank (str): Taxonomical rank searched for
+
+    Returns:
+        dict: Standardized GBIF result dict value
+    """
     if rank.lower() in ["species", "variety", "subspecies"]:
         if "species" in result:
             result["species"] = result["species"].replace("\u00d7", "x")
@@ -28,7 +38,17 @@ def standardize_result(result: dict, rank: str):
     return result
 
 
-def gbif_name_lookup(name: str, rank: str):
+def gbif_name_lookup(name: str, rank: str) -> dict:
+    """Searches GBIF for a result within the 'plantae' kingdom matching the name and
+    rank specified
+
+    Args:
+        name (str): query name
+        rank (str): query rank
+
+    Returns:
+        dict: GBIF result, else None
+    """
     params = {"name": name.lower(), "rank": rank, "limit": 3}
     data: list = requests.get("https://api.gbif.org/v1/species?", params).json()
 
