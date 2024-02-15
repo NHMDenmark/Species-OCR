@@ -8,6 +8,7 @@ try:
     image_folder = config("IMAGE_FOLDER")
     session_folder = config("SESSION_FOLDER")
     web_host = config("WEB_HOST")
+    web_secret = config("WEB_SECRET")
 except UndefinedValueError as e:
     raise Exception(
         f"""Required environment variable '{e.__str__().split(' ')[0]}' not found.

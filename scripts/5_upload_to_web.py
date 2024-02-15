@@ -11,6 +11,7 @@ from nhma_species_ocr.util.variables import (
     label_threshold_folder,
     output_file,
     web_host,
+    web_secret,
 )
 
 label_temp_folder = f"{label_folder}_temp"
@@ -61,7 +62,7 @@ for index, group in enumerate(grouped_specimen_list):
         ),
     }
 
-    headers = {"Authorization": "cO2ofuusuMpgjWm5xPT0VQecgHQpEZky84bDdbdkabM="}
+    headers = {"Authorization": web_secret}
 
     r = requests.post(
         web_host + "/api/folderupload", files=files, data=data, headers=headers
