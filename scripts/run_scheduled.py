@@ -5,6 +5,24 @@ from time import localtime, strftime
 
 from decouple import config
 
+from nhma_species_ocr.util.variables import (
+    cover_detection_scale,
+    cover_detection_timeout,
+    dev_only_covers,
+    dilation_rect_size,
+    google_credentials,
+    label_extra_border,
+    label_scale,
+    refinery_metadata,
+    refinery_pass,
+    refinery_user,
+    test_upload,
+    threshold_block_size,
+    threshold_subtract_constant,
+    web_host,
+    web_secret,
+)
+
 
 def find_folder_with_tif_files(root_folder):
     for folder_name, subfolders, filenames in os.walk(root_folder):
@@ -57,8 +75,23 @@ for script in scripts:
     output = subprocess.run(
         [python_path, os.path.join(script_folder, script)],
         env={
+            "GOOGLE_APPLICATION_CREDENTIALS": google_credentials,
+            "WEB_HOST": web_host,
+            "WEB_SECRET": web_secret,
+            "REFINERY_USER": refinery_user,
+            "REFINERY_PASS": refinery_pass,
+            "REFINERY_METADATA": refinery_metadata,
             "IMAGE_FOLDER": folder_with_tif_files,
             "SESSION_FOLDER": session_folder_new,
+            "COVER_DETECTION_SCALE_PERCENT": cover_detection_scale,
+            "COVER_DETECTION_TIMEOUT_MS": cover_detection_timeout,
+            "FIND_COVER_LABEL_DILATION_RECT_SIZE": dilation_rect_size,
+            "LABEL_SCALE_PERCENT": label_scale,
+            "LABEL_EXTRA_BORDER_PIXELS": label_extra_border,
+            "LABEL_THRESHOLD_BLOCK_SIZE": threshold_block_size,
+            "LABEL_THRESHOLD_SUBTRACT_CONSTANT": threshold_subtract_constant,
+            "DEV_ONLY_COVERS": dev_only_covers,
+            "TEST_UPLOAD": test_upload,
         },
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
