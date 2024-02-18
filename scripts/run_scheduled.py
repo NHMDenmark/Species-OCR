@@ -30,6 +30,7 @@ def find_folder_with_tif_files(root_folder):
             if filename.endswith(".tif"):
                 return folder_name
 
+
 time_format = "%Y-%m-%d %H:%M"
 
 image_root_folder = config("IMAGE_ROOT_FOLDER")
@@ -39,15 +40,18 @@ if not folder_with_tif_files:
     raise Exception("No unprocessed folder with .tif files found")
 
 session_root_folder = config("SESSION_ROOT_FOLDER")
-session_folder = f"{os.path.join(session_root_folder, folder_with_tif_files)}"
-session_folder = session_folder.replace(f"/{image_root_folder}", "")
-session_folder_new = session_folder
+session_folder = (
+    f"{os.path.join(session_root_folder, os.path.basename(folder_with_tif_files))}"
+)
+session_folder_new = f"{session_folder}-00"
 
 session_exists = os.path.exists(session_folder_new)
 session_number = 1
 
 while session_exists:
-    session_folder_new = f"{session_folder}-{session_number}"
+    session_folder_new = (
+        f"{session_folder}-{'0' if session_number < 10 else ''}{session_number}"
+    )
     session_exists = os.path.exists(session_folder_new)
     session_number += 1
 
