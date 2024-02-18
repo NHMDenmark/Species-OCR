@@ -9,7 +9,6 @@ from nhma_species_ocr.util.variables import output_file
 with open(output_file) as file:
     grouped_specimen_list = json.load(file)
 
-
 for index, group in enumerate(grouped_specimen_list):
     print(
         "CATEGORIZE LABEL TEXT: group #{0} of {1}: {2}...".format(
@@ -125,7 +124,6 @@ for index, group in enumerate(grouped_specimen_list):
             highest_classification_level = classification_level
             break
     group["cover"]["highest_classification_level"] = highest_classification_level
-
 
 with open(output_file, "w+") as outfile:
     outfile.write(json.dumps(grouped_specimen_list, indent=4))

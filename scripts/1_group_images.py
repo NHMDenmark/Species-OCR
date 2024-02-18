@@ -21,7 +21,7 @@ image_names = [f for f in os.listdir(image_folder) if (f[-3:] == "tif")]
 
 if os.path.exists(label_folder):
     shutil.rmtree(label_folder)
-os.mkdir(label_folder)
+os.makedirs(label_folder)
 
 grouped_specimen_list = []
 
@@ -54,7 +54,6 @@ for index, image_name in enumerate(sorted(image_names)):
                 "id": read_specimen_data_matrix(image, no_timeout=True),
             }
         )
-
 
 with open(output_file, "w+") as outfile:
     outfile.write(json.dumps(grouped_specimen_list, indent=4))

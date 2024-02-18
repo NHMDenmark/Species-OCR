@@ -15,7 +15,7 @@ from nhma_species_ocr.util.variables import (
 
 if os.path.exists(label_threshold_folder):
     shutil.rmtree(label_threshold_folder)
-os.mkdir(label_threshold_folder)
+os.makedirs(label_threshold_folder)
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = google_credentials
 

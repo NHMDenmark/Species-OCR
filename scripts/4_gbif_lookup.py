@@ -49,6 +49,5 @@ for index, group in enumerate(grouped_specimen_list):
         if result and result["canonicalName"].lower() == family.lower():
             group["cover"]["gbif_match"] = result
 
-
 with open(output_file, "w+") as outfile:
     outfile.write(json.dumps(grouped_specimen_list, indent=4))

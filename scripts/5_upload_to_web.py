@@ -18,7 +18,7 @@ label_temp_folder = f"{label_folder}_temp"
 
 if os.path.exists(label_temp_folder):
     shutil.rmtree(label_temp_folder)
-os.mkdir(label_temp_folder)
+os.makedirs(label_temp_folder)
 
 with open(output_file) as file:
     grouped_specimen_list = json.load(file)
