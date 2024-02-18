@@ -9,6 +9,9 @@ try:
     session_folder = config("SESSION_FOLDER")
     web_host = config("WEB_HOST")
     web_secret = config("WEB_SECRET")
+    refinery_user = config("REFINERY_USER")
+    refinery_pass = config("REFINERY_PASS")
+    refinery_metadata = config("REFINERY_METADATA")
 except UndefinedValueError as e:
     raise Exception(
         f"""Required environment variable '{e.__str__().split(' ')[0]}' not found.
@@ -32,3 +35,4 @@ threshold_subtract_constant = config(
     "LABEL_THRESHOLD_SUBTRACT_CONSTANT", default=18, cast=int
 )
 dev_only_covers = config("DEV_ONLY_COVERS", default=False, cast=bool)
+test_upload = config("TEST_UPLOAD", default=False, cast=bool)

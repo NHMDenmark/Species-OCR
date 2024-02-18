@@ -44,7 +44,7 @@ Fill in the variables marked as required:
 
 ### 4. Run scripts
 
-To run all five steps, navigate to the scripts folder an use:
+To run all five steps, navigate to the scripts folder and use:
 
 ```
 python 1_group_images.py && python 2_read_labels.py && python 3_categorize_label_text.py && python 4_gbif_lookup.py && python 5_upload_to_web.py
