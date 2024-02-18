@@ -73,6 +73,7 @@ scripts = [
     "3_categorize_label_text.py",
     "4_gbif_lookup.py",
     "5_upload_to_web.py",
+    "6_upload_images.py",
 ]
 
 env = os.environ.copy()
