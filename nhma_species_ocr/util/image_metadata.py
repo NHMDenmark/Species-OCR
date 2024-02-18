@@ -39,6 +39,9 @@ def image_metadata(image_path: str) -> any:
         meta["workstation_name"],
     )
 
-    metadata = metadataHandler(**meta, date_asset_taken=time, asset_guid=guid_name)
+    meta["date_asset_taken"] = time
+    meta["asset_guid"] = guid_name
+
+    metadata = metadataHandler(**meta)
 
     return metadata.getMetadata()
