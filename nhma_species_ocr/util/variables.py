@@ -36,3 +36,4 @@ threshold_subtract_constant = config(
 )
 dev_only_covers = config("DEV_ONLY_COVERS", default=False, cast=bool)
 test_upload = config("TEST_UPLOAD", default=False, cast=bool)
+delete_image_folder = config("DELETE_IMAGE_FOLDER", default=False, cast=bool)

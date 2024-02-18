@@ -8,6 +8,7 @@ from decouple import config
 from nhma_species_ocr.util.variables import (
     cover_detection_scale,
     cover_detection_timeout,
+    delete_image_folder,
     dev_only_covers,
     dilation_rect_size,
     google_credentials,
@@ -37,7 +38,7 @@ image_root_folder = config("IMAGE_ROOT_FOLDER")
 folder_with_tif_files = find_folder_with_tif_files(image_root_folder)
 
 if not folder_with_tif_files:
-    raise Exception("No unprocessed folder with .tif files found")
+    raise Exception("No folder with .tif files found")
 
 session_root_folder = config("SESSION_ROOT_FOLDER")
 session_folder = (
@@ -113,7 +114,7 @@ for script in scripts:
 
 with open(log_file, "r") as f:
     log = f.read()
-    if not log.find("Error") > -1:
+    if delete_image_folder and not log.find("Error") > -1:
         shutil.rmtree(folder_with_tif_files)
 
 with open(log_file, "a") as f:
