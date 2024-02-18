@@ -5,24 +5,7 @@ from time import localtime, strftime
 
 from decouple import config
 
-from nhma_species_ocr.util.variables import (
-    cover_detection_scale,
-    cover_detection_timeout,
-    delete_image_folder,
-    dev_only_covers,
-    dilation_rect_size,
-    google_credentials,
-    label_extra_border,
-    label_scale,
-    refinery_metadata,
-    refinery_pass,
-    refinery_user,
-    test_upload,
-    threshold_block_size,
-    threshold_subtract_constant,
-    web_host,
-    web_secret,
-)
+from nhma_species_ocr.util.variables import delete_image_folder
 
 
 def find_folder_with_tif_files(root_folder):
@@ -78,23 +61,8 @@ scripts = [
 ]
 
 env = os.environ.copy()
-env["GOOGLE_APPLICATION_CREDENTIALS"] = str(google_credentials)
-env["WEB_HOST"] = str(web_host)
-env["WEB_SECRET"] = str(web_secret)
-env["REFINERY_USER"] = str(refinery_user)
-env["REFINERY_PASS"] = str(refinery_pass)
-env["REFINERY_METADATA"] = str(refinery_metadata)
 env["IMAGE_FOLDER"] = str(folder_with_tif_files)
 env["SESSION_FOLDER"] = str(session_folder_new)
-env["COVER_DETECTION_SCALE_PERCENT"] = str(cover_detection_scale)
-env["COVER_DETECTION_TIMEOUT_MS"] = str(cover_detection_timeout)
-env["FIND_COVER_LABEL_DILATION_RECT_SIZE"] = str(dilation_rect_size)
-env["LABEL_SCALE_PERCENT"] = str(label_scale)
-env["LABEL_EXTRA_BORDER_PIXELS"] = str(label_extra_border)
-env["LABEL_THRESHOLD_BLOCK_SIZE"] = str(threshold_block_size)
-env["LABEL_THRESHOLD_SUBTRACT_CONSTANT"] = str(threshold_subtract_constant)
-env["DEV_ONLY_COVERS"] = str(dev_only_covers)
-env["TEST_UPLOAD"] = str(test_upload)
 
 for script in scripts:
     output = subprocess.run(
@@ -106,7 +74,7 @@ for script in scripts:
 
     with open(log_file, "a") as f:
         f.write(f"Running {script}\n")
-        f.write(output)
+        f.write(output.replace("\n\n", "\n"))
         f.write("\n")
 
     if output.find("Error") > -1:
