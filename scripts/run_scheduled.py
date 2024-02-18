@@ -43,8 +43,8 @@ with open(log_file, "a") as f:
     f.write(f"Session started: {session_time}\n")
     f.write(f"Process started: {process_time}\n\n")
 
-python_path = ".venv/bin/python"
-script_folder = "scripts"
+python_path = config("PYTHON_PATH")
+script_folder = config("SCRIPT_FOLDER")
 scripts = [
     "1_group_images.py",
     "2_read_labels.py",
