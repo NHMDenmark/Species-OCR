@@ -71,28 +71,29 @@ scripts = [
     "5_upload_to_web.py",
 ]
 
+env = os.environ.copy()
+env["GOOGLE_APPLICATION_CREDENTIALS"] = str(google_credentials)
+env["WEB_HOST"] = str(web_host)
+env["WEB_SECRET"] = str(web_secret)
+env["REFINERY_USER"] = str(refinery_user)
+env["REFINERY_PASS"] = str(refinery_pass)
+env["REFINERY_METADATA"] = str(refinery_metadata)
+env["IMAGE_FOLDER"] = str(folder_with_tif_files)
+env["SESSION_FOLDER"] = str(session_folder_new)
+env["COVER_DETECTION_SCALE_PERCENT"] = str(cover_detection_scale)
+env["COVER_DETECTION_TIMEOUT_MS"] = str(cover_detection_timeout)
+env["FIND_COVER_LABEL_DILATION_RECT_SIZE"] = str(dilation_rect_size)
+env["LABEL_SCALE_PERCENT"] = str(label_scale)
+env["LABEL_EXTRA_BORDER_PIXELS"] = str(label_extra_border)
+env["LABEL_THRESHOLD_BLOCK_SIZE"] = str(threshold_block_size)
+env["LABEL_THRESHOLD_SUBTRACT_CONSTANT"] = str(threshold_subtract_constant)
+env["DEV_ONLY_COVERS"] = str(dev_only_covers)
+env["TEST_UPLOAD"] = str(test_upload)
+
 for script in scripts:
     output = subprocess.run(
         [python_path, os.path.join(script_folder, script)],
-        env={
-            "GOOGLE_APPLICATION_CREDENTIALS": str(google_credentials),
-            "WEB_HOST": str(web_host),
-            "WEB_SECRET": str(web_secret),
-            "REFINERY_USER": str(refinery_user),
-            "REFINERY_PASS": str(refinery_pass),
-            "REFINERY_METADATA": str(refinery_metadata),
-            "IMAGE_FOLDER": str(folder_with_tif_files),
-            "SESSION_FOLDER": str(session_folder_new),
-            "COVER_DETECTION_SCALE_PERCENT": str(cover_detection_scale),
-            "COVER_DETECTION_TIMEOUT_MS": str(cover_detection_timeout),
-            "FIND_COVER_LABEL_DILATION_RECT_SIZE": str(dilation_rect_size),
-            "LABEL_SCALE_PERCENT": str(label_scale),
-            "LABEL_EXTRA_BORDER_PIXELS": str(label_extra_border),
-            "LABEL_THRESHOLD_BLOCK_SIZE": str(threshold_block_size),
-            "LABEL_THRESHOLD_SUBTRACT_CONSTANT": str(threshold_subtract_constant),
-            "DEV_ONLY_COVERS": str(dev_only_covers),
-            "TEST_UPLOAD": str(test_upload),
-        },
+        env=env,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
     ).stdout.decode("utf-8")
