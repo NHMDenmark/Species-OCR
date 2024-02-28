@@ -1,10 +1,8 @@
 import json
 import os
 
-from DaSSCoUtils.checksum import checksumHandler
 from DaSSCoUtils.upload import uploadHandler
 
-from nhma_species_ocr.util.image_metadata import image_metadata
 from nhma_species_ocr.util.variables import (
     image_folder,
     output_file,
@@ -24,9 +22,9 @@ for index, group in enumerate(grouped_specimen_list):
     for image in group["specimen"]:
         image_path = os.path.join(image_folder, image["image_file"])
 
-        checksum = checksumHandler(image_path).getChecksum()
-        metadata = image_metadata(image_path)
-        asset_name = image["image_file"]
+        checksum = image["checksum"]
+        metadata = image["metadata"]
+        asset_name = f"{metadata["asset_guid"]}.tif"
 
         if test_upload:
             print(f"Test upload: {image_path}")
@@ -34,7 +32,7 @@ for index, group in enumerate(grouped_specimen_list):
                 checksum=checksum,
                 metadata=metadata,
                 assetName=asset_name,
-                imagePath=image_path,
+                imagePath=image_path
             )
         else:
             print(f"Upload: {image_path}")
@@ -42,11 +40,5 @@ for index, group in enumerate(grouped_specimen_list):
                 checksum=checksum,
                 metadata=metadata,
                 assetName=asset_name,
-                imagePath=image_path,
+                imagePath=image_path
             )
-
-        image["guid"] = metadata["asset_guid"]
-        image["checksum"] = checksum
-
-with open(output_file, "w+") as outfile:
-    outfile.write(json.dumps(grouped_specimen_list, indent=4))

@@ -10,6 +10,7 @@ from nhma_species_ocr.util.variables import (
     label_scale,
     label_threshold_folder,
     output_file,
+    session_started_at,
     web_host,
     web_secret,
 )
@@ -45,7 +46,17 @@ for index, group in enumerate(grouped_specimen_list):
         "highest_classification": cover["highest_classification_level"],
         "flagged": cover["error"],
         "approved": False,
-        "specimen": [],
+        "session_started_at": session_started_at,
+        "specimen": [
+            {
+                "guid": specimen["guid"],
+                "digitiser": specimen["metadata"]["digitiser"],
+                "date_asset_taken": specimen["metadata"]["date_asset_taken"],
+                "image_file": specimen["image_file"],
+                "checksum": specimen["checksum"],
+            }
+            for specimen in group["specimen"]
+        ],
     }
 
     scale = label_scale / 100

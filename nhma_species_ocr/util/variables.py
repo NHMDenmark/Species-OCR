@@ -7,6 +7,7 @@ try:
     google_credentials = config("GOOGLE_APPLICATION_CREDENTIALS")
     image_folder = config("IMAGE_FOLDER")
     session_folder = config("SESSION_FOLDER")
+    session_started_at = config("SESSION_STARTED_AT")
     web_host = config("WEB_HOST")
     web_secret = config("WEB_SECRET")
     refinery_user = config("REFINERY_USER")
@@ -36,4 +37,3 @@ threshold_subtract_constant = config(
 )
 dev_only_covers = config("DEV_ONLY_COVERS", default=False, cast=bool)
 test_upload = config("TEST_UPLOAD", default=False, cast=bool)
-delete_image_folder = config("DELETE_IMAGE_FOLDER", default=False, cast=bool)

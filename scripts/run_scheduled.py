@@ -5,8 +5,6 @@ from time import localtime, strftime
 
 from decouple import config
 
-from nhma_species_ocr.util.variables import delete_image_folder
-
 
 def find_folder_with_tif_files(root_folder):
     for folder_name, subfolders, filenames in os.walk(root_folder):
@@ -15,7 +13,7 @@ def find_folder_with_tif_files(root_folder):
                 return folder_name
 
 
-time_format = "%Y-%m-%d %H:%M"
+time_format = "%Y-%m-%d %H:%M:%S"
 
 image_root_folder = config("IMAGE_ROOT_FOLDER")
 folder_with_tif_files = find_folder_with_tif_files(image_root_folder)
@@ -56,13 +54,15 @@ scripts = [
     "2_read_labels.py",
     "3_categorize_label_text.py",
     "4_gbif_lookup.py",
-    "5_upload_to_web.py",
-    "6_upload_images.py",
+    "5_specimen_metadata.py",
+    "6_upload_to_web.py",
+    "7_upload_images.py",
 ]
 
 env = os.environ.copy()
 env["IMAGE_FOLDER"] = str(folder_with_tif_files)
 env["SESSION_FOLDER"] = str(session_folder_new)
+env["SESSION_STARTED_AT"] = str(session_time)
 
 for script in scripts:
     output = subprocess.run(
@@ -79,6 +79,8 @@ for script in scripts:
 
     if output.find("Error") > -1:
         break
+
+delete_image_folder = config("DELETE_IMAGE_FOLDER", default=False, cast=bool)
 
 with open(log_file, "r") as f:
     log = f.read()
