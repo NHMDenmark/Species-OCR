@@ -15,7 +15,6 @@ def image_metadata(image_path: str) -> any:
         tags = exifread.process_file(image_file)
 
     val = str(tags["EXIF DateTimeOriginal"])
-    print(val)
     time = (
         val[:4]
         + "-"
@@ -30,7 +29,6 @@ def image_metadata(image_path: str) -> any:
         + val[17:19]
         + "+02:00"
     )
-    print(time)
     guid = guidHandler()
     guid_name = guid.createGuid(
         time,
