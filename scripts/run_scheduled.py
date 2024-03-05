@@ -2,17 +2,19 @@ import os
 import shutil
 import subprocess
 from time import localtime, strftime
-from typing import List
 
 from decouple import config
 
-ignore_image_folders: List[str] = config(
-    "IGNORE_IMAGE_FOLDERS", default=[], cast=lambda x: x.split(",")
-)
+session_root_folder = config("SESSION_ROOT_FOLDER")
+allow_previous_session: bool = config("ALLOW_PREVIOUS_SESSION", default=True, cast=bool)
+
 
 def find_folder_with_tif_files(root_folder):
     for folder_name, subfolders, filenames in os.walk(root_folder):
-        if os.path.basename(folder_name) not in ignore_image_folders:
+        if allow_previous_session or os.path.basename(folder_name) not in [
+            os.path.basename(folder)[:-3]
+            for folder, sub, file in os.walk(session_root_folder)
+        ]:
             for filename in filenames:
                 if filename.endswith(".tif"):
                     return folder_name
@@ -26,9 +28,8 @@ folder_with_tif_files = find_folder_with_tif_files(image_root_folder)
 if not folder_with_tif_files:
     raise Exception("No folder with .tif files found")
 
-session_root_folder = config("SESSION_ROOT_FOLDER")
-session_folder = (
-    f"{os.path.join(session_root_folder, os.path.basename(folder_with_tif_files))}"
+session_folder = os.path.join(
+    session_root_folder, os.path.basename(folder_with_tif_files)
 )
 session_folder_new = f"{session_folder}-00"
 
