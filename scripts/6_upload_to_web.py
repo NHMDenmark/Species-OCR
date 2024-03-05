@@ -76,8 +76,16 @@ for index, group in enumerate(grouped_specimen_list):
     headers = {"Authorization": web_secret}
 
     r = requests.post(
-        web_host + "/api/folderupload", files=files, data=data, headers=headers
+        web_host + "/api/labelupload",
+        data={"session_started_at": session_started_at},
+        files=files,
+        headers=headers,
     )
+    if not r.ok:
+        print(r.content)
+        raise Exception(r.json())
+
+    r = requests.post(web_host + "/api/folderupload", json=data, headers=headers)
     if not r.ok:
         print(r.content)
         raise Exception(r.json())
