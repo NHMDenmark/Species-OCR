@@ -2,15 +2,20 @@ import os
 import shutil
 import subprocess
 from time import localtime, strftime
+from typing import List
 
 from decouple import config
 
+ignore_image_folders: List[str] = config(
+    "IGNORE_IMAGE_FOLDERS", default=[], cast=lambda x: x.split(",")
+)
 
 def find_folder_with_tif_files(root_folder):
     for folder_name, subfolders, filenames in os.walk(root_folder):
-        for filename in filenames:
-            if filename.endswith(".tif"):
-                return folder_name
+        if os.path.basename(folder_name) not in ignore_image_folders:
+            for filename in filenames:
+                if filename.endswith(".tif"):
+                    return folder_name
 
 
 time_format = "%Y-%m-%d %H:%M:%S"
