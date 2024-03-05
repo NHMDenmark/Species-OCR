@@ -83,7 +83,7 @@ for script in scripts:
         f.write(output.replace("\n\n", "\n"))
         f.write("\n")
 
-    if output.find("Error") > -1:
+    if output.find("Error") > -1 or output.find("Exception") > -1:
         break
 
 delete_image_folder = config("DELETE_IMAGE_FOLDER", default=False, cast=bool)

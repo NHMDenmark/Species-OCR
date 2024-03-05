@@ -79,5 +79,5 @@ for index, group in enumerate(grouped_specimen_list):
         web_host + "/api/folderupload", files=files, data=data, headers=headers
     )
     if not r.ok:
-        # print(r.content)
+        print(r.content)
         raise Exception(r.json())
