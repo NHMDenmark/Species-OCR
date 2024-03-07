@@ -31,12 +31,12 @@
   "payload_type": [
     "image"
   ],
-  "pipeline_name": "PIPEHERB0001",
+  "pipeline_name": "PIPEHERB0002",
   "preparation_type": "sheet",
   "pushed_to_specify_date": null,
   "restricted_access": [],
   "specimen_pid": "",
-  "status": "For processing",
+  "status": "",
   "tags": {},
   "workstation_name": "WORKHERB0001"
 }

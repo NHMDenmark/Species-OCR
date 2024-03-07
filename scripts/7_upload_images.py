@@ -24,7 +24,7 @@ for index, group in enumerate(grouped_specimen_list):
 
         checksum = image["checksum"]
         metadata = image["metadata"]
-        asset_name = f"{metadata['asset_guid']}.tif"
+        asset_name = metadata['asset_guid']
 
         if test_upload:
             print(f"Test upload: {image_path}")
