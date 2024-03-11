@@ -3,6 +3,8 @@ from pylibdmtx.pylibdmtx import decode
 
 from nhma_species_ocr.util.variables import (
     cover_detection_scale,
+    cover_detection_shrink,
+    cover_detection_threshold,
     cover_detection_timeout,
 )
 
@@ -26,8 +28,8 @@ def read_specimen_data_matrix(img: cv2.Mat, no_timeout: bool = False) -> str:
         img,
         max_count=1,
         timeout=(None if no_timeout else cover_detection_timeout),
-        threshold=30,
-        shrink=3,
+        threshold=cover_detection_threshold,
+        shrink=cover_detection_shrink,
         deviation=25,
     )
     return (

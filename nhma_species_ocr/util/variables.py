@@ -31,6 +31,8 @@ label_scale = config("LABEL_SCALE_PERCENT", default=40, cast=int)
 label_extra_border = config("LABEL_EXTRA_BORDER_PIXELS", default=100, cast=int)
 cover_detection_scale = config("COVER_DETECTION_SCALE_PERCENT", default=75, cast=int)
 cover_detection_timeout = config("COVER_DETECTION_TIMEOUT_MS", default=4000, cast=int)
+cover_detection_threshold = config("COVER_DETECTION_THRESHOLD", default=30, cast=int)
+cover_detection_shrink = config("COVER_DETECTION_SHRINK", default=3, cast=int)
 threshold_block_size = config("LABEL_THRESHOLD_BLOCK_SIZE", default=91, cast=int)
 threshold_subtract_constant = config(
     "LABEL_THRESHOLD_SUBTRACT_CONSTANT", default=18, cast=int
