@@ -50,17 +50,24 @@ def find_cover_label(img: cv2.Mat, debug: bool = False) -> cv2.Mat:
         closing, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE
     )
 
+    height, width = img_bottom_left.shape[:2]
+
     img_with_candidate_rectangles = img_bottom_left.copy()
     candidate_rectangles = []
     for i, contour in enumerate(contours):
         approx = cv2.approxPolyDP(contour, 0.1 * cv2.arcLength(contour, True), True)
         if len(approx) == 4:  # Approximate polygon is rectangle
-            ((x, y), (width, height), angle) = rect = cv2.minAreaRect(contour)
-            a = width * height
+            rect = cv2.minAreaRect(contour)
+            box = cv2.boxPoints(rect)
+            box = np.int0(box)
+            (x, y), (rect_width, rect_height), angle = rect
+            area = rect_width * rect_height
             if (
-                a > 2000000 and hierarchy[0][i][2] > 0
-            ):  # Meets area requirement and is a closed rectangle
-                candidate_rectangles.append((rect, a))
+                area > 2000000
+                and hierarchy[0][i][2] > 0
+                and all(0 <= x < width and 0 <= y < height for x, y in box)
+            ):  # Meets area requirement and is a closed rectangle contained in image
+                candidate_rectangles.append((rect, area))
                 cv2.drawContours(
                     img_with_candidate_rectangles,
                     [np.int0(cv2.boxPoints(rect))],
