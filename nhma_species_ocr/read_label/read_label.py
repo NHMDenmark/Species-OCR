@@ -55,7 +55,11 @@ def read_label(img_path: str, debug: bool = False) -> list:
     response = vision.AnnotateImageResponse(
         client.document_text_detection(image=vision.Image(content=content))
     )  # Performs text detection on the image file
-    text_blocks = response.full_text_annotation.pages[0].blocks
+    text_blocks = (
+        response.full_text_annotation.pages[0].blocks
+        if len(response.full_text_annotation.pages)
+        else []
+    )
 
     paragraphs = []
     for block in sorted(
