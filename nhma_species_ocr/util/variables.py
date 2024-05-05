@@ -39,3 +39,4 @@ threshold_subtract_constant = config(
 )
 dev_only_covers = config("DEV_ONLY_COVERS", default=False, cast=bool)
 test_upload = config("TEST_UPLOAD", default=False, cast=bool)
+huggingface_api_key = config("HUGGINGFACE_API_KEY", default=None)
