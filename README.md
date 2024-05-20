@@ -1,7 +1,7 @@
-# NHMASpeciesOCR
+# Species-OCR
 Python package for processing images of species at the Natural History Museum Aarhus. It is used to automatically retrieve taxonomical information about specimen from the label of the containing folder.
 
-The package is designed as a pipeline of 5 scripts that persist data in a local output file between runs. The last task uploads the persisted data to an instance of [NHMASpeciesWeb](https://github.com/Aksel147/NHMASpeciesWeb).
+The package is designed as a pipeline of 5 scripts that persist data in a local output file between runs. The last task uploads the persisted data to an instance of [Species-Web](https://github.com/NHMDenmark/Species-Web).
 
 #### Images
 Images for processing must be in .tif format. The images used have a resolution of 8736 × 11648. An image of a folder is followed by images of all the specimen inside the folder, sorted with the file names (e.g. image_0001, image_0002...). Below is an example image of a folder and a specimen.
@@ -39,7 +39,7 @@ Fill in the variables marked as required:
 | Variable                       | Description                                    |
 |--------------------------------|------------------------------------------------|
 | GOOGLE_APPLICATION_CREDENTIALS | Path to the credentials downloaded in step 2.  |
-| WEB_HOST                       | URL to [NHMASpeciesWeb](https://github.com/Aksel147/NHMASpeciesWeb) instance (Can be omitted for testing. Instead run the html_report.py script to get local html report) |
+| WEB_HOST                       | URL to [Species-Web](https://github.com/NHMDenmark/Species-Web) instance (Can be omitted for testing. Instead run the html_report.py script to get local html report) |
 | WEB_SECRET                   | Secret for using the upload endpoint of WEB_HOST      |
 | REFINERY_USER                 | Username for authenticating for upload with NHMA image server       |
 | REFINERY_PASS                 | Password for authenticating for upload with NHMA image server       |
@@ -64,7 +64,7 @@ If the scripts are run manually, the following variables are also required:
 |--------------------------------|------------------------------------------------|
 | IMAGE_FOLDER                    | Path to folder of images to process |
 | SESSION_FOLDER                   | Path to folder for persisting the session data            |
-| SESSION_STARTED_AT                 | ISO8601 Timestamp of when the image session started. Is used to identify a folder of images, once they are uploaded to [NHMASpeciesWeb](https://github.com/Aksel147/NHMASpeciesWeb) |
+| SESSION_STARTED_AT                 | ISO8601 Timestamp of when the image session started. Is used to identify a folder of images, once they are uploaded to [Species-Web](https://github.com/NHMDenmark/Species-Web) |
 
 ### 4. Run scripts
 
@@ -119,7 +119,7 @@ This script attaches metadata to all specimen files
 
 ### 6_upload_to_web.py
 
-This script uploads the data from the session to [NHMASpeciesWeb](https://github.com/Aksel147/NHMASpeciesWeb).
+This script uploads the data from the session to [Species-Web](https://github.com/NHMDenmark/Species-Web).
 
 ### 7_upload_images.py
 
@@ -127,7 +127,7 @@ This script uploads the image files of all specimen to an image server of Natura
 
 ### html_report.py
 
-This script can be used for testing purposes to create a local HTML report of the results, when no [NHMASpeciesWeb](https://github.com/Aksel147/NHMASpeciesWeb) is available.
+This script can be used for testing purposes to create a local HTML report of the results, when no [Species-Web](https://github.com/NHMDenmark/Species-Web) is available.
 
 ### run_scheduled.py
 
