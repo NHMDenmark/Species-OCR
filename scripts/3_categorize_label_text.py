@@ -108,6 +108,9 @@ for index, group in enumerate(grouped_specimen_list):
             else:
                 error = True
 
+    if genus["text"] == "" or species["text"] == "":
+        error = True
+
     group["cover"]["area"] = area
     group["cover"]["family"] = family
     group["cover"]["genus"] = genus
