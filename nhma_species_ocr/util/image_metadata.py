@@ -5,7 +5,8 @@ from DaSSCoUtils.guid import guidHandler
 from DaSSCoUtils.metadata import metadataHandler
 
 from nhma_species_ocr.util.variables import refinery_metadata
-
+import datetime
+import pytz
 
 def image_metadata(image_path: str) -> any:
     with open(refinery_metadata) as file:
@@ -41,5 +42,6 @@ def image_metadata(image_path: str) -> any:
     meta["asset_guid"] = guid_name
 
     metadata = metadataHandler(**meta)
-
+    timeCreated = datetime.datetime.now().astimezone(pytz.timezone('Europe/Copenhagen')).replace(microsecond=0).isoformat()
+    meta["date_metadata_created"]=timeCreated
     return metadata.getMetadata()
