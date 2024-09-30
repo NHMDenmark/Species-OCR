@@ -1,5 +1,5 @@
 # Species-OCR
-Python package for processing images of species at the Natural History Museum Aarhus. It is used to automatically retrieve taxonomical information about specimen from the label of the containing folder.
+Python package for processing images of species at the herbarium, part of Science Museums Aarhus University. It is used to automatically retrieve taxonomic information about specimens from the label of the containing folder.
 
 The package is designed as a pipeline of 5 scripts that persist data in a local output file between runs. The last task uploads the persisted data to an instance of [Species-Web](https://github.com/NHMDenmark/Species-Web).
 
