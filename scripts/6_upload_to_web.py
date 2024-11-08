@@ -49,6 +49,7 @@ for index, group in enumerate(grouped_specimen_list):
         "session_started_at": session_started_at,
         "specimen": [
             {
+                "barcode": specimen["id"],
                 "guid": specimen["guid"],
                 "digitiser": specimen["metadata"]["digitiser"],
                 "date_asset_taken": specimen["metadata"]["date_asset_taken"],
