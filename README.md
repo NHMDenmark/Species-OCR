@@ -11,6 +11,8 @@ Images for processing must be in .tif format. The images used have a resolution 
 
 ### 1. Install dependencies
 
+**Python 10 is required to run these scripts. It is recommended to create a virtual environment, as shown below, and install Python 3.10 in this environment.**
+
 **Optional**: It is recommended to install dependencies in a python virtual environment. To create and activate a virtual environment, use:
 ```
 python -m venv venv
