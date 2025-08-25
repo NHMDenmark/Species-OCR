@@ -10,6 +10,9 @@ from nhma_species_ocr.is_cover.is_cover import is_cover
 from nhma_species_ocr.read_specimen_data_matrix.read_specimen_data_matrix import (
     read_specimen_data_matrix,
 )
+from nhma_species_ocr.read_specimen_data_matrix.read_specimen_data_matrix import (
+    zxing_barcode_detector,
+)
 from nhma_species_ocr.util.variables import (
     dev_only_covers,
     image_folder,
@@ -51,7 +54,7 @@ for index, image_name in enumerate(sorted(image_names)):
         grouped_specimen_list[-1]["specimen"].append(
             {
                 "image_file": image_name,
-                "id": read_specimen_data_matrix(image, no_timeout=True),
+                "id": read_specimen_data_matrix(image, no_timeout=True) or zxing_barcode_detector(image),
             }
         )
 

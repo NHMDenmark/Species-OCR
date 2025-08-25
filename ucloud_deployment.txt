@@ -1,0 +1,6 @@
+sudo apt install -y software-properties-common
+sudo add-apt-repository ppa:deadsnakes/ppa -y
+sudo apt update
+sudo apt install -y python3.10 python3.10-venv python3.10-dev
+sudo apt install libdmtx-dev
+source test310/bin/activate

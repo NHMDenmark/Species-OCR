@@ -3,9 +3,13 @@ import base64
 import cv2
 import requests
 import stamina
+import zxingcpp
 
 from nhma_species_ocr.read_specimen_data_matrix.read_specimen_data_matrix import (
     read_specimen_data_matrix,
+)
+from nhma_species_ocr.read_specimen_data_matrix.read_specimen_data_matrix import (
+    zxing_barcode_detector,
 )
 from nhma_species_ocr.util.variables import huggingface_api_key
 
@@ -40,6 +44,7 @@ def zero_shot_classification(img: cv2.Mat) -> bool:
     return classes[0]["label"] == "specimen folder"
 
 
+
 def is_cover(img: cv2.Mat) -> bool:
     """Takes an image and determines whether it is a cover of a specimen collection.
     Works by trying to detect a data matrix that specimen are marked with.
@@ -51,8 +56,10 @@ def is_cover(img: cv2.Mat) -> bool:
         bool: Whether or not the image is a specimen cover
     """
     decoding = read_specimen_data_matrix(img)
+    barcode_detected = zxing_barcode_detector(img)
+    
     return (
         False
-        if decoding
+        if decoding or barcode_detected
         else (zero_shot_classification(img) if huggingface_api_key else True)
     )

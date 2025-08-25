@@ -59,7 +59,7 @@ def find_cover_label(img: cv2.Mat, debug: bool = False) -> cv2.Mat:
         if len(approx) == 4:  # Approximate polygon is rectangle
             rect = cv2.minAreaRect(contour)
             box = cv2.boxPoints(rect)
-            box = np.int0(box)
+            box = np.int32(box)
             (x, y), (rect_width, rect_height), angle = rect
             area = rect_width * rect_height
             if (
@@ -70,7 +70,7 @@ def find_cover_label(img: cv2.Mat, debug: bool = False) -> cv2.Mat:
                 candidate_rectangles.append((rect, area))
                 cv2.drawContours(
                     img_with_candidate_rectangles,
-                    [np.int0(cv2.boxPoints(rect))],
+                    [np.int64(cv2.boxPoints(rect))],
                     0,
                     (0, 0, 255),
                     6,
@@ -88,7 +88,7 @@ def find_cover_label(img: cv2.Mat, debug: bool = False) -> cv2.Mat:
         if debug:
             img_with_contour = img_bottom_left.copy()
             cv2.drawContours(
-                img_with_contour, [np.int0(cv2.boxPoints(winner))], 0, (0, 0, 255), 6
+                img_with_contour, [np.int64(cv2.boxPoints(winner))], 0, (0, 0, 255), 6
             )
             show_image_debug("label_contour", img_with_contour)
 
