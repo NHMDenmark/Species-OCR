@@ -22,6 +22,9 @@ source ./venv/bin/activate
 Install dependencies with:
 ```
 pip install -r requirements.txt
+pip install -e .
+
+
 ```
 
 ### 2. Get Google Credentials
