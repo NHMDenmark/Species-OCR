@@ -43,9 +43,7 @@ Fill in the variables marked as required:
 | GOOGLE_APPLICATION_CREDENTIALS | Path to the credentials downloaded in step 2.  |
 | WEB_HOST                       | URL to [Species-Web](https://github.com/NHMDenmark/Species-Web) instance (Can be omitted for testing. Instead run the html_report.py script to get local html report) |
 | WEB_SECRET                   | Secret for using the upload endpoint of WEB_HOST      |
-| REFINERY_USER                 | Username for authenticating for upload with NHMA image server       |
-| REFINERY_PASS                 | Password for authenticating for upload with NHMA image server       |
-| REFINERY_METADATA                 | Path to template metadata file with some fields set (see metadata-example.json)   |
+| INGESTION_API                 | URL of the Ingestion API - to retrieve metadata for each image by providing its filename |
 
 #### Running with run_scheduled.py
 
@@ -73,8 +71,10 @@ If the scripts are run manually, the following variables are also required:
 To run all five steps, navigate to the scripts folder and use:
 
 ```
-python 1_group_images.py && python 2_read_labels.py && python 3_categorize_label_text.py && python 4_gbif_lookup.py && python 5_upload_to_web.py
+python 1_group_images.py && python 2_read_labels.py && python 3_categorize_label_text.py && python 4_gbif_lookup.py && python 5_specimen_metadata.py && python 6_upload_to_web.py
 ```
+
+### Ingest via the [Ingestion Client](https://github.com/NHMDenmark/DaSSCo-Ingestion-Client) with AU work flow
 
 ## Scripts
 
@@ -123,9 +123,7 @@ This script attaches metadata to all specimen files
 
 This script uploads the data from the session to [Species-Web](https://github.com/NHMDenmark/Species-Web).
 
-### 7_upload_images.py
 
-This script uploads the image files of all specimen to an image server of Natural History Museum Denmark
 
 ### html_report.py
 
