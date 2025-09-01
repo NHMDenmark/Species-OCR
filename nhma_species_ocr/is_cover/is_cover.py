@@ -3,7 +3,6 @@ import base64
 import cv2
 import requests
 import stamina
-import zxingcpp
 
 from nhma_species_ocr.read_specimen_data_matrix.read_specimen_data_matrix import (
     read_specimen_data_matrix,

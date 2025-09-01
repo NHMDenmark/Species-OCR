@@ -10,9 +10,7 @@ try:
     session_started_at = config("SESSION_STARTED_AT")
     web_host = config("WEB_HOST")
     web_secret = config("WEB_SECRET")
-    refinery_user = config("REFINERY_USER")
-    refinery_pass = config("REFINERY_PASS")
-    refinery_metadata = config("REFINERY_METADATA")
+    ingestion_api = config("INGESTION_API")
 except UndefinedValueError as e:
     raise Exception(
         f"""Required environment variable '{e.__str__().split(' ')[0]}' not found.
