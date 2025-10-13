@@ -49,7 +49,7 @@ def zxing_barcode_detector(img) -> str:
         bool: True if a barcode is found, False otherwise.
     """
     # Read barcodes from the image
-    results = zxingcpp.read_barcodes(img)
+    results = zxingcpp.read_barcodes(img, formats=zxingcpp.DataMatrix)
 
     # Keep barcode if it starts with "AU"
     if not results:
