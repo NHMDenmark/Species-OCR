@@ -1,10 +1,11 @@
 import json
 import os
 import shutil
-from os.path import join
-
 import cv2
+import requests
 
+from pathlib import Path
+from os.path import join
 from nhma_species_ocr.find_cover_label.find_cover_label import find_cover_label
 from nhma_species_ocr.is_cover.is_cover import is_cover
 from nhma_species_ocr.read_specimen_data_matrix.read_specimen_data_matrix import (
@@ -18,9 +19,35 @@ from nhma_species_ocr.util.variables import (
     image_folder,
     label_folder,
     output_file,
+    ingestion_api
 )
 
-image_names = [f for f in os.listdir(image_folder) if (f[-3:] == "tif")]
+folder = Path(image_folder)
+image_paths = list(folder.glob("*.tif")) + list(folder.glob("*.tiff"))
+image_names = [p.name for p in image_paths]
+
+first_json = image_paths[0].with_suffix(".json")
+if not first_json.exists():
+    raise Exception(f"Missing JSON file for {image_paths[0].name}")
+    
+with first_json.open("r", encoding="utf-8") as f:
+    metadata = json.load(f)
+    
+body = {
+    "workstation": metadata['workstation_name'],
+    "dateAssetTaken": metadata['date_asset_taken']
+}
+res = requests.post(f"{ingestion_api}/metadata/files/search", json=body)
+
+if res.status_code != 200:
+    raise Exception(f"Request Error: {res.content}")
+
+images = [{ "image_name": item['filename'], "original_name": item['original_filename']} for item in res.json()]
+
+# Validation
+missing = set(image_names) - {d["image_name"] for d in images}
+if missing:
+    raise ValueError(f"Missing in API: {sorted(missing)}")
 
 if os.path.exists(label_folder):
     shutil.rmtree(label_folder)
@@ -28,7 +55,9 @@ os.makedirs(label_folder)
 
 grouped_specimen_list = []
 
-for index, image_name in enumerate(sorted(image_names)):
+for index, d in enumerate(images):
+    image_name = d["image_name"]
+    original_name = d["original_name"]
     print(
         "GROUP IMAGE: image #{0} of {1}: {2}...".format(
             index + 1, len(image_names), image_name
@@ -46,6 +75,7 @@ for index, image_name in enumerate(sorted(image_names)):
                 "id": index + 1,
                 "cover": {
                     "image_file": image_name,
+                    "original_name": original_name,
                 },
                 "specimen": [],
             }
@@ -54,6 +84,7 @@ for index, image_name in enumerate(sorted(image_names)):
         grouped_specimen_list[-1]["specimen"].append(
             {
                 "image_file": image_name,
+                "original_name": original_name,
                 "id": read_specimen_data_matrix(image, no_timeout=True) or zxing_barcode_detector(image),
             }
         )
