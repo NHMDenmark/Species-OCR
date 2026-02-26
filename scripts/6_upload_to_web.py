@@ -4,6 +4,7 @@ import shutil
 
 import cv2
 import requests
+from keycloak.keycloak_token import get_new_token
 
 from nhma_species_ocr.util.variables import (
     label_folder,
@@ -12,7 +13,6 @@ from nhma_species_ocr.util.variables import (
     output_file,
     session_started_at,
     web_host,
-    web_secret,
 )
 
 label_temp_folder = f"{label_folder}_temp"
@@ -73,8 +73,11 @@ for index, group in enumerate(grouped_specimen_list):
             f"{label_threshold_folder}/{cover['image_file'][:-4]}.png", "rb"
         ),
     }
-
-    headers = {"Authorization": web_secret}
+    
+    try:
+        headers = {"Authorization": f"Bearer {get_new_token()}"}
+    except Exception as e:
+        raise Exception(f"Failed to get Keycloak token: {e}")
 
     r = requests.post(
         web_host + "/api/labelupload",
@@ -85,6 +88,11 @@ for index, group in enumerate(grouped_specimen_list):
     if not r.ok:
         print(r.content)
         raise Exception(r.json())
+
+    try:
+        headers = {"Authorization": f"Bearer {get_new_token()}"}
+    except Exception as e:
+        raise Exception(f"Failed to get Keycloak token: {e}")
 
     r = requests.post(web_host + "/api/folderupload", json=data, headers=headers)
     if not r.ok:

@@ -45,8 +45,16 @@ Fill in the variables marked as required:
 |--------------------------------|------------------------------------------------|
 | GOOGLE_APPLICATION_CREDENTIALS | Path to the credentials downloaded in step 2.  |
 | WEB_HOST                       | URL to [Species-Web](https://github.com/NHMDenmark/Species-Web) instance (Can be omitted for testing. Instead run the html_report.py script to get local html report) |
-| WEB_SECRET                   | Secret for using the upload endpoint of WEB_HOST      |
 | INGESTION_API                 | URL of the Ingestion API - to retrieve metadata for each image by providing its filename |
+
+Fill in the required keycloak variables
+
+| Variable                       | Description                                    |
+|--------------------------------|------------------------------------------------|
+| KC_URL | Kecloak host url |
+| KC_REALM | Keycloak realm name |
+| KC_CLIENT_ID | Client ID - set up in keycloak for client authentication flow |
+| KC_SECRET | Client secret |
 
 #### Running with run_scheduled.py
 
